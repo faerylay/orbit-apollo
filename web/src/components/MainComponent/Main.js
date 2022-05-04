@@ -25,7 +25,6 @@ const MainComponent = () => {
 
   const { loading, subscribeToMore, data, error } = useQuery(ME);
 
-
   useEffect(() => {
     if (!loading) {
       dispatch(addUser(data?.me))

@@ -2,14 +2,13 @@ import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, Button, ButtonBase, CardActions, Chip, ClickAwayListener, Divider, Grid, Paper, Popper, Stack, TextField, Typography, useMediaQuery, Badge } from '@mui/material';
-import { useSelector } from 'react-redux';
 import { IconBell } from '@tabler/icons';
-import { useLazyQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 import MainCard from '../../Helpers/cards/MainCard';
 import { Transitions } from '../../../MainComponent';
 
-import { GET_USER_NOTIFICATION } from '../../../../graphql'
+import { GET_USER_NOTIFICATION, ME } from '../../../../graphql'
 import { NOTI_PAGE_NOTIFICATION_LIMIT } from '../../../../constants'
 import Notifications from './Notifications';
 import { status } from './utils';
@@ -41,23 +40,17 @@ const NotificationSection = () => {
     if (event?.target.value) setValue(event?.target.value);
   };
 
-  const auth = useSelector(state => state?.users?.user)
+  const { data: { me } = {} } = useQuery(ME);
   const variables = {
-    userId: auth?.id,
+    userId: me?.id,
     offset: 0,
     limit,
   };
-  const [getNoti, { data, loading, fetchMore, networkStatus }] = useLazyQuery(GET_USER_NOTIFICATION, {
+
+  const { data, loading, fetchMore, networkStatus } = useQuery(GET_USER_NOTIFICATION, {
     variables,
     notifyOnNetworkStatusChange: true,
   });
-
-  useEffect(() => {
-    if (auth?.id) {
-      getNoti();
-    }
-  }, [getNoti, auth]);
-
   return (
     <>
       <Box

@@ -10,6 +10,10 @@ const notificationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
+  mention: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
   post: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Post'

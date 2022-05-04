@@ -89,19 +89,21 @@ const CommentCreate = ({ postId, author }) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     const { data } = await createComment()
+    if (auth?.id !== author?.id) {
+      const mention = mentions?.map(item => item.userId)
+      notification.create({
+        userId: author?.id,
+        postId,
+        mentions: mention,
+        notificationType: NotificationType.COMMENT,
+        notificationTypeId: data?.createComment?.id,
+      })
+    }
     setText('')
     setErrors('')
     setImage('')
     setMentions([])
     setIsOpenSearchResult(false)
-    if (auth?.id !== author?.id) {
-      notification.create({
-        userId: author?.id,
-        postId,
-        notificationType: NotificationType.COMMENT,
-        notificationTypeId: data?.createComment?.id,
-      });
-    }
   }
 
 

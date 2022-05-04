@@ -28,6 +28,10 @@ const NotificationList = ({ notification, close }) => {
     initialRender = 'liked your Post'
     goTo = `/single-post/${notification?.like?.post?.id}`
     description = notification?.like?.post?.title
+  } else if (notification?.mention) {
+    initialRender = 'mentioned you in thier comments'
+    goTo = `/single-post/${notification?.comment?.post?.id}`
+    description = notification?.comment?.comment
   }
   else if (notification?.commentlikes) {
     initialRender = 'liked your comment '

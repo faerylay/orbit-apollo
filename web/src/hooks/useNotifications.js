@@ -27,11 +27,12 @@ const useNotifications = () => {
       console.error('Error while mutating a notification', error);
     }
   };
-  const create = ({ userId, postId, notificationType, notificationTypeId }) => {
+  const create = ({ userId, postId, mentions, notificationType, notificationTypeId }) => {
     return mutate(CREATE_NOTIFICATION, {
       authorId: auth?.id,
       userId,
       postId,
+      mentions,
       notificationType,
       notificationTypeId,
     });
