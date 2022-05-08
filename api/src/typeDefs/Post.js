@@ -39,18 +39,18 @@ export default gql`
     title: String!
     description: String!
     image: [Upload]
-    imagePublicId: String
+    imagePublicId: [String]
   }
   input UpdatePostInput {
     postId: ID!
     title: String!
     description: String!
-    image: Upload
-    imagePublicId: String
+    image: [Upload]
+    imagePublicId: [String]
   }
   input DeletePostInput {
     postId: ID!
-    imagePublicId: String
+    imagePublicId: [String]
   }
 
   extend type Query {

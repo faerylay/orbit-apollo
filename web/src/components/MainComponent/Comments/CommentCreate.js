@@ -86,11 +86,15 @@ const CommentCreate = ({ postId, author }) => {
     setIsOpenSearchResult(false)
   }
 
+  // const ok = text?.match(/@[A-Za-z0-9]{1,30}/g)
+  // const test = ok?.map((element) => element?.replace(/[^a-zA-Z ]/, ''));
+  // const testing = mentions?.filter(item => test?.indexOf(item) > -1)
+  // console.log(testing)
   const handleSubmit = async (e) => {
     e.preventDefault()
     const { data } = await createComment()
-    if (auth?.id !== author?.id) {
-      const mention = mentions?.map(item => item.userId)
+    if (auth?.id) {
+      const mention = mentions?.map(item => item?.userId)
       notification.create({
         userId: author?.id,
         postId,
@@ -132,7 +136,7 @@ const CommentCreate = ({ postId, author }) => {
                       <Box key={user.id} sx={{ display: 'flex', justifyContent: 'space-between', py: .5 }}>
                         <Box sx={{ mr: 2 }}>
                           {user.image ? (
-                            <img src={user.image} alt={'.'} style={{ width: 40, height: 40, borderRadius: 50 }} />
+                            <img src={user.image} alt={'...'} style={{ width: 40, height: 40, borderRadius: 50 }} />
                           ) : <Avatar sx={{ width: 40, height: 40, mr: 0 }} />}
                         </Box>
                         <Typography sx={{ py: 1 }} onClick={(e) => startMention(e, user)}>{user.fullName}</Typography>

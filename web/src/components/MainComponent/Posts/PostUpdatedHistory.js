@@ -24,7 +24,7 @@ const PostUpdatedHistory = ({ data, closeMenu }) => {
         <Box sx={postEdit}>
           <Typography variant="h4" sx={{ py: 1 }}>View Edited history</Typography>
           {
-            data?.postupdatedhistorys.map(post => (
+            data?.postupdatedhistorys?.map(post => (
               <Card key={post.id} sx={{ border: 1, borderColor: '#eaeaea', mb: 1 }}>
                 <CardHeader avatar={
                   <Avatar alt={post.user.fullName?.charAt(0).toUpperCase()} src={post?.user?.image} aria-label="recipe" sx={{ border: 2 }} />
@@ -32,12 +32,12 @@ const PostUpdatedHistory = ({ data, closeMenu }) => {
                   title={post.user.fullName}
                   subheader={moment.unix(post.createdAt).fromNow()}
                 />
-                <CardMedia
-                  component="img"
-                  width="100%"
-                  image={post.image}
-                  alt={post.image}
-                />
+                {
+                  post.image.map((img, index) => (
+                    <CardMedia key={index.toString()} component="img" image={img} alt={img} />
+                  ))
+                }
+
                 <CardContent>
                   <Typography variant="h6" color="black">{post.title}</Typography>
                   <Typography variant="body2" color="text.secondary"> {post.description}</Typography>

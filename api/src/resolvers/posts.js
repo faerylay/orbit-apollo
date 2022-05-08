@@ -186,17 +186,27 @@ const resolvers = {
       validatePostId(postId)
       await postValidate.validateAsync({ title, description }, { abortEarly: false })
       const findPost = await Post.findById(postId).populate('author')
-
-      let imageUrl
+      const imageUrl = []
+      const imagePublicIds = []
       if (image) {
-        const { createReadStream } = await image
-        const stream = createReadStream()
-        const updateImage = await uploadToCloudinary(stream, 'post', imagePublicId)
-        if (!updateImage.secure_url) {
-          throw new Error('Something went wrong while updating image to Cloudinary')
+        for (let i = 0; i < image.length; i++) {
+          const { createReadStream } = await image[i]
+          const stream = createReadStream()
+          const uploadImage = await uploadToCloudinary(stream, 'post', imagePublicId)
+          if (!uploadImage.secure_url) {
+            throw new Error('Something went wrong while uploading image to Cloudinary')
+          }
+          imageUrl.push(uploadImage.secure_url)
+          imagePublicIds.push(uploadImage.public_id)
         }
-        imageUrl = updateImage.secure_url
-        imagePublicId = updateImage.public_id
+      }
+      if (imagePublicId) {
+        for (const publicId of imagePublicId) {
+          const deleteImage = await deleteFromCloudinary(publicId)
+          if (deleteImage.result !== 'ok') {
+            throw new Error('Something went wrong while deleting image from Cloudinary')
+          }
+        }
       }
 
       if (findPost && findPost.author.id === userId) {
@@ -204,7 +214,7 @@ const resolvers = {
           title,
           description,
           image: imageUrl,
-          imagePublicId
+          imagePublicId: imagePublicIds
         }, { new: true })
           .populate('author')
           .populate('likes')
@@ -223,9 +233,11 @@ const resolvers = {
       validatePostId(postId)
       const findPost = await Post.findById(postId).populate('author')
       if (imagePublicId) {
-        const deleteImage = await deleteFromCloudinary(imagePublicId)
-        if (deleteImage.result !== 'ok') {
-          throw new Error('Something went wrong while deleting image from Cloudinary')
+        for (const publicId of imagePublicId) {
+          const deleteImage = await deleteFromCloudinary(publicId)
+          if (deleteImage.result !== 'ok') {
+            throw new Error('Something went wrong while deleting image from Cloudinary')
+          }
         }
       }
       if (findPost && findPost.author.id === userId) {

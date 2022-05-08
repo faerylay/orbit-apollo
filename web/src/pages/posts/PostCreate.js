@@ -142,8 +142,8 @@ export default function PostCreate() {
                         </Fab>
                       </label>
                       <Box sx={{ width: '100%', height: 50, display: 'flex', overflow: 'scroll', ml: 5 }}>
-                        {(image || []).map(url => (
-                          <img key={url.name} src={URL.createObjectURL(url)} alt="..." style={{ marginRight: 5, borderRadius: 5 }} />
+                        {(image || []).map((url, index) => (
+                          <img key={index.toString()} src={URL.createObjectURL(url)} alt="..." style={{ marginRight: 5, borderRadius: 5 }} />
                         ))}
                       </Box>
                     </Box>

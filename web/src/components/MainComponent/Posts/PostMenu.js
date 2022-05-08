@@ -32,6 +32,7 @@ export default function PostMenu({ postId, userId, imagePublicId }) {
     deletePost()
     popupState.close()
   }
+
   return (
     <PopupState variant="popover" popupId="demo-popup-menu">
       {(popupState) => (
@@ -53,7 +54,7 @@ export default function PostMenu({ postId, userId, imagePublicId }) {
               )
             }
             {
-              !loading && data.postupdatedhistorys.length !== 0 && (
+              !loading && data?.postupdatedhistorys.length !== 0 && (
                 <MenuItem >
                   <PostUpdatedHistory data={data} closeMenu={popupState} />
                 </MenuItem>

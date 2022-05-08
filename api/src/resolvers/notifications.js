@@ -27,11 +27,11 @@ const resolvers = {
     createNotification: async (parent, { input: { userId, authorId, postId, mentions, commentId, notificationType, notificationTypeId } }, context, info) => {
       let newNotification
       if (notificationType === 'POSTCREATED') {
-        const followerUsers = await Follow.find({ author: userId })
+        const followerUsers = await Follow.find({ follower: userId }).select('-authorId')
         for (const follower of followerUsers) {
           newNotification = await Notification.create([{
             author: authorId,
-            user: follower.follower,
+            user: follower.author,
             post: postId,
             comment: commentId,
             [notificationType.toLowerCase()]: notificationTypeId
@@ -44,7 +44,6 @@ const resolvers = {
           })
         }
       }
-
       if (notificationType === 'COMMENT') {
         if (mentions.length) {
           for (const mention of mentions) {
@@ -73,7 +72,8 @@ const resolvers = {
           }).save()
           await User.findOneAndUpdate({ _id: userId }, { $push: { notifications: newNotification.id } })
         }
-      } else {
+      }
+      if (notificationType === 'LIKE' || notificationType === 'FOLLOW' || notificationType === 'COMMENTLIKES') {
         newNotification = await new Notification({
           author: authorId,
           user: userId,
