@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
 import { useSelector } from 'react-redux';
-import { IconSquarePlus } from '@tabler/icons';
-import { TextField, Button, Paper, Box, Grid, Typography, Fab } from '@mui/material';
+import { IconSquarePlus, IconX } from '@tabler/icons';
+import { TextField, Button, Paper, Box, Grid, Typography, Fab, IconButton, Modal } from '@mui/material';
 import { CREATE_POST, FETCH_POSTS_QUERY, FETCH_USER, ME, GET_USER_POSTS, GET_FOLLOWED_POSTS } from '../../graphql';
 import { useInput } from '../../hooks/hooks'
 import { HOME_PAGE_POSTS_LIMIT, PROFILE_PAGE_POSTS_LIMIT, MAX_POST_IMAGE_SIZE, NotificationType } from '../../constants'
@@ -15,7 +15,6 @@ export default function PostCreate() {
   const [errors, setErrors] = useState('')
   const [loading, setLoading] = useState(false)
   const [image, setImage] = useState([])
-
   const navigate = useNavigate();
   let title = useInput()
   let description = useInput()
@@ -70,6 +69,16 @@ export default function PostCreate() {
       });
     }
   }
+  const [open, setOpen] = useState(false);
+  const [preview, setPreview] = useState('')
+  const handleOpen = (img) => {
+    setOpen(true);
+    setPreview(img)
+  }
+  const handleClose = () => {
+    setOpen(false)
+    setPreview('')
+  };
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -143,8 +152,37 @@ export default function PostCreate() {
                       </label>
                       <Box sx={{ width: '100%', height: 50, display: 'flex', overflow: 'scroll', ml: 5 }}>
                         {(image || []).map((url, index) => (
-                          <img key={index.toString()} src={URL.createObjectURL(url)} alt="..." style={{ marginRight: 5, borderRadius: 5 }} />
+                          <Box key={index.toString()} sx={{ display: 'flex', overflow: 'hidden' }} >
+                            <IconButton onClick={() => setImage(image.filter(item => item !== url))} sx={{ position: 'absolute', background: 'red', borderRadius: 1 }}>
+                              <IconX size={10} color="#fff" stroke={3} />
+                            </IconButton>
+                            <img onClick={() => handleOpen(URL.createObjectURL(url))} src={URL.createObjectURL(url)} alt="..." style={{ borderRadius: 5, marginRight: 5, width: 100, height: 50 }} />
+                          </Box>
                         ))}
+                        <Modal
+                          keepMounted
+                          open={open}
+                          onClose={handleClose}
+                          aria-labelledby="keep-mounted-modal-image"
+                          aria-describedby="keep-mounted-modal-description"
+                        >
+                          <Box sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: 400,
+                            bgcolor: 'background.paper',
+                            boxShadow: 24,
+                            p: .5,
+                            borderRadius: 3
+                          }}>
+                            <IconButton onClick={handleClose} sx={{ position: 'absolute', background: 'red', borderRadius: 1, width: 30, height: 30 }}>
+                              <IconX size={20} color="#fff" stroke={5} />
+                            </IconButton>
+                            <img id="keep-mounted-modal-image" src={preview ? preview : null} alt='...' style={{ borderRadius: 5, marginRight: 5, width: '100%', height: 300 }} />
+                          </Box>
+                        </Modal>
                       </Box>
                     </Box>
                   </Grid>

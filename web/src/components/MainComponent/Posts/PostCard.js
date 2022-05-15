@@ -18,8 +18,8 @@ export default function PostCard({ data }) {
         />
         <CardMedias image={post?.image} />
         <CardContent>
-          <Typography sx={{ cursor: 'pointer', ":hover": { color: 'dodgerblue' } }} onClick={() => navigate(`/single-post/${post.id}`)} variant="h6" color="black">{post.title}</Typography>
-          <Typography variant="body2" color="text.secondary"> {post.description}</Typography>
+          <Typography sx={{ cursor: 'pointer', ":hover": { color: 'dodgerblue' } }} onClick={() => navigate(`/single-post/${post.id}`)} variant="h5" color="black">{post.title}</Typography>
+          <Typography variant="subtitle1" color="text.secondary"> {post.description}</Typography>
         </CardContent>
         <CardActions disableSpacing sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', textAlign: 'center', alignItems: 'center' }}>

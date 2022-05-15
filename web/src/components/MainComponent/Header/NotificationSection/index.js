@@ -7,7 +7,6 @@ import { useQuery } from '@apollo/client';
 
 import MainCard from '../../Helpers/cards/MainCard';
 import { Transitions } from '../../../MainComponent';
-
 import { GET_USER_NOTIFICATION, ME } from '../../../../graphql'
 import { NOTI_PAGE_NOTIFICATION_LIMIT } from '../../../../constants'
 import Notifications from './Notifications';
@@ -51,17 +50,10 @@ const NotificationSection = () => {
     variables,
     notifyOnNetworkStatusChange: true,
   });
+
   return (
     <>
-      <Box
-        sx={{
-          ml: 2,
-          mr: 3,
-          [theme.breakpoints.down('md')]: {
-            mr: 2
-          }
-        }}
-      >
+      <Box sx={{ ml: 2, mr: 3, [theme.breakpoints.down('md')]: { mr: 2 } }} >
         <ButtonBase sx={{ borderRadius: '12px' }}>
           <Avatar
             variant="rounded"

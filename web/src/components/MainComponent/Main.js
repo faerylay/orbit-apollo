@@ -11,6 +11,7 @@ import Chat from './Chat';
 import { NOTIFICATION_CREATED_OR_DELETED, ME } from '../../graphql'
 import { SET_MENU, addUser } from '../../redux';
 import { Main } from './mainStyle'
+import NotFound from './Helpers/NotFound';
 
 const MainComponent = () => {
   const dispatch = useDispatch();
@@ -77,13 +78,14 @@ const MainComponent = () => {
   if (loading) return 'loading...';
   if (error) {
     const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+    let devErrorMessage, prodErrorMessage;
     if (isDevelopment) {
-      const devErrorMessage =
-        'Sorry, something went wrong. Please open the browser console to view the detailed error message.';
-      const prodErrorMessage = "Sorry, something went wrong. We're working on getting this fixed as soon as we can.";
-      console.log(devErrorMessage, prodErrorMessage, error?.graphQLErrors[0]?.message)
+      devErrorMessage = 'Sorry, something went wrong. Please open the browser console to view the detailed error message.';
+      console.log(error?.graphQLErrors[0]?.message)
     }
-    // return <NotFound message={isDevelopment ? devErrorMessage : prodErrorMessage} showHomePageLink={false} />;
+
+    prodErrorMessage = "Sorry, something went wrong. We're working on getting this fixed as soon as we can.";
+    return <NotFound message={isDevelopment ? devErrorMessage : prodErrorMessage} showHomePageLink={'/login'} />;
   }
 
   return (

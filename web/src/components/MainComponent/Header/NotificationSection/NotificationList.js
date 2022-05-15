@@ -11,12 +11,11 @@ import NotificationMenu from './NotificationMenu'
 
 import { UPDATE_NOTIFICATION_SEEN, ME, GET_USER_NOTIFICATION } from '../../../../graphql'
 import { NOTI_PAGE_NOTIFICATION_LIMIT } from '../../../../constants';
-import { textEllipsis } from './styles'
+
 
 const NotificationList = ({ notification, close }) => {
   const ref = React.useRef(null);
   useClickOutSide(ref, close);
-
   const navigate = useNavigate()
   const client = useApolloClient()
   const auth = useSelector(state => state?.users?.user)
@@ -56,6 +55,7 @@ const NotificationList = ({ notification, close }) => {
     goTo = 'ok'
     description = 'ok'
   }
+
   const updateNotificationSeen = async () => {
     try {
       await client.mutate({
@@ -108,7 +108,14 @@ const NotificationList = ({ notification, close }) => {
         }
           secondary={
             <>
-              <Typography sx={textEllipsis} variant="caption">{description}</Typography>
+              <Typography variant="caption" sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: '2',
+                WebkitBoxOrient: 'vertical',
+              }}
+              >{description}</Typography>
               <Typography variant="caption" >
                 {moment.unix(notification?.createdAt).fromNow()}
               </Typography>

@@ -33,10 +33,9 @@ const PostUpdatedHistory = ({ data, closeMenu }) => {
                 />
                 {
                   post?.image?.map((img, index) => (
-                    <CardMedia key={index.toString()} component="img" image={img} alt={img} />
+                    <CardMedia key={index.toString()} component="img" image={img} alt={'...'} />
                   ))
                 }
-
                 <CardContent>
                   <Typography variant="h6" color="black">{post.title}</Typography>
                   <Typography variant="body2" color="text.secondary"> {post.description}</Typography>

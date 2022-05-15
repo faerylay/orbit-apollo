@@ -13,9 +13,6 @@ export default function PostMenu({ postId, userId, imagePublicId }) {
   const navigate = useNavigate()
 
   const [deletePost] = useMutation(DELETE_POST, {
-    update(proxy) {
-      navigate('/')
-    },
     onError(err) {
       console.log(err?.graphQLErrors[0].message)
     },
@@ -27,12 +24,15 @@ export default function PostMenu({ postId, userId, imagePublicId }) {
     ]
   })
 
-  const { data, loading } = useQuery(POST_UPDATED_HISTORIES, { variables: { postId } })
+  const { data, loading, error } = useQuery(POST_UPDATED_HISTORIES, {
+    variables: { postId },
+  })
   const deleting = (popupState) => {
     deletePost()
+    navigate('/')
     popupState.close()
   }
-
+  if (error) return console.log(error)
   return (
     <PopupState variant="popover" popupId="demo-popup-menu">
       {(popupState) => (

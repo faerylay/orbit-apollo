@@ -5,7 +5,7 @@ const CardMedias = ({ image }) => {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
       {
-        image.map(img => (
+        image?.map(img => (
           <Box key={img.toString()} sx={{ p: img ? 2 : null }}>
             <CardMedia
               component="img"

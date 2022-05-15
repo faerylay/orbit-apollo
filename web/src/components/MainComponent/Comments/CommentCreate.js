@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef, useState, } from 'react'
 import { useMutation, useApolloClient } from '@apollo/client'
 import { useSelector } from 'react-redux';
 
-import { Button, Box, Grid, Fab } from '@mui/material';
+import { Button, Box, Grid, Fab, Typography } from '@mui/material';
 import { IconSquarePlus } from '@tabler/icons';
 
 import { EditorState, convertToRaw } from 'draft-js';
@@ -11,16 +11,16 @@ import createMentionPlugin from '@draft-js-plugins/mention';
 import "@draft-js-plugins/mention/lib/plugin.css";
 
 import { CREATE_COMMENT, FETCH_POSTS_QUERY, FETCH_POST, ME, USER_MENTION } from '../../../graphql';
-import { MAX_POST_IMAGE_SIZE, NotificationType } from '../../../constants'
+import { NotificationType } from '../../../constants'
 import useNotifications from '../../../hooks/useNotifications'
-import { editorStyle } from './styles';
+import { editorContent, mentionList, handlePostImageUpload, editorStyle } from './CommentHelper';
 
 const CommentCreate = ({ postId, author }) => {
   const ref = useRef(null);
+  const focusEditor = () => ref.current.focus();
   const client = useApolloClient()
   const notification = useNotifications()
   const auth = useSelector(state => state?.users?.user)
-
 
   const [image, setImage] = useState('')
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
@@ -28,22 +28,10 @@ const CommentCreate = ({ postId, author }) => {
   const [suggestions, setSuggestions] = useState([]);
 
   const rawEditorContent = convertToRaw(editorState.getCurrentContent());
-  const mappedBlocks = rawEditorContent.blocks.map(block => (!block.text.trim() && '\n') || block.text);
-  const commentText = mappedBlocks.reduce((acc, block) => {
-    let returned = acc;
-    if (block === "\n") returned += block;
-    else returned += `${block}\n`;
-    return returned;
-  }, "")
-  const mentionList = Object.values(rawEditorContent.entityMap).map(entity => entity.data.mention);
-  const mentions = mentionList.map(({ id: userId, name: fullName }) => ({ userId, fullName }));
+  const commentText = editorContent(rawEditorContent)
+  const mentions = mentionList(rawEditorContent)
 
-
-
-  const [createComment, { loading }] = useMutation(CREATE_COMMENT, {
-    onError(err) {
-      console.log(err?.graphQLErrors[0]?.message)
-    },
+  const [createComment, { loading, error }] = useMutation(CREATE_COMMENT, {
     variables: {
       input: {
         postId,
@@ -58,7 +46,6 @@ const CommentCreate = ({ postId, author }) => {
       { query: ME },
     ]
   })
-
 
   const { MentionSuggestions, plugins } = useMemo(() => {
     const mentionPlugin = createMentionPlugin({ mentionPrefix: '@' })
@@ -83,20 +70,6 @@ const CommentCreate = ({ postId, author }) => {
     setSuggestions(result);
   }, [setSuggestions, postId, client]);
 
-  const focusEditor = () => {
-    ref.current.focus()
-  }
-  const handlePostImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (file.size >= MAX_POST_IMAGE_SIZE) {
-      console.log(`File size should be less then ${MAX_POST_IMAGE_SIZE / 1000000}MB`);
-      return;
-    }
-    setImage(file);
-    e.target.value = null;
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     const { data } = await createComment()
@@ -113,7 +86,7 @@ const CommentCreate = ({ postId, author }) => {
     setEditorState(EditorState.createEmpty())
     setImage('')
   }
-
+  if (error) return <Typography>Something wrong creating comment</Typography>
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={2} justify='center'>
@@ -143,7 +116,7 @@ const CommentCreate = ({ postId, author }) => {
                 name="commentImage"
                 type="file"
                 accept="image/x-png,image/jpeg"
-                onChange={handlePostImageUpload}
+                onChange={(e) => handlePostImageUpload(e, setImage)}
               />
               <Fab
                 color="inherit"
