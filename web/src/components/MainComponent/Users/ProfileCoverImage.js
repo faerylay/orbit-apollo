@@ -97,7 +97,7 @@ const ProfileCoverImage = ({ getUser }) => {
               />
 
               <Fab
-                color='grey'
+                color='inherit'
                 size='medium'
                 component='span'
                 aria-label='add'
