@@ -1,14 +1,14 @@
-import { gql } from 'apollo-server-express'
+import { gql } from 'apollo-server-express';
 
 export default gql`
-  union SearchResult  = User | Post
+  union SearchResult = User | Post
   scalar Upload
   type File {
     filename: String!
     mimetype: String!
     encoding: String!
   }
-  type User{
+  type User {
     id: ID!
     fullName: String!
     email: String!
@@ -19,12 +19,12 @@ export default gql`
     coverImagePublicId: String
     posts: [Post]
     likes: [Like]
-    commentlikes:[CommentLikes]
+    commentlikes: [CommentLikes]
     comments: [Comment]
     following: [Follow]
     followers: [Follow]
     notifications: [NotificationPayload]
-    createdAt:String
+    createdAt: String
     updatedAt: String
   }
 
@@ -40,11 +40,11 @@ export default gql`
     coverImagePublicId: String
     posts: [PostPayload]
     likes: [Like]
-    commentlikes:[CommentLikes]
+    commentlikes: [CommentLikes]
     followers: [FollowPayload]
     following: [FollowPayload]
-    followerCount:Int!
-    followingCount:Int!
+    followerCount: Int!
+    followingCount: Int!
     notifications: [NotificationPayload]
     newNotifications: [NotificationPayload]
     createdAt: String
@@ -61,9 +61,9 @@ export default gql`
     userId: ID!
     isOnline: Boolean
   }
-  
+
   type UserAndPostPayload {
-    posts: [PostPayload] 
+    posts: [PostPayload]
     users: [UserPayload]
   }
 
@@ -74,22 +74,22 @@ export default gql`
     isCover: Boolean
   }
 
-  extend type Query{
-    me:UserPayload @auth
-    getUser(id:ID!):UserPayload @auth
-    getUsers: [UserPayload]!  @auth
+  extend type Query {
+    me: UserPayload @auth
+    getUser(id: ID!): UserPayload @auth
+    getUsers: [UserPayload]! @auth
     searchUsers(searchQuery: String!): [UserPayload] @auth
     searchs(searchQuery: String!): [SearchResult!] @auth
     suggestPeople: [UserPayload] @auth
   }
-  extend type Mutation{
-    signUp(input:RegisterInput):User!  @guest
-    signIn(email:String!,password:String!):User! @guest
-    signOut:Boolean 
+  extend type Mutation {
+    signUp(input: RegisterInput): User! @guest
+    signIn(email: String!, password: String!): User! @guest
+    signOut: Boolean
     # Uploads user Profile or Cover photo
     uploadUserPhoto(input: UploadUserPhotoInput!): UserPayload @auth
   }
-  extend type Subscription{
-    isUserOnline(authUserId: ID!, userId: ID!): IsUserOnlinePayload 
+  extend type Subscription {
+    isUserOnline(authUserId: ID!, userId: ID!): IsUserOnlinePayload
   }
-`
+`;
