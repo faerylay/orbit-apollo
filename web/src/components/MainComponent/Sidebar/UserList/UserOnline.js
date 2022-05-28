@@ -1,14 +1,14 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { Box, Avatar, Typography, ButtonBase } from '@mui/material';
+import { useNavigate } from 'react-router-dom'
 import { useSubscription } from '@apollo/client'
-import { useTheme } from '@mui/material/styles';
-import { Box, Avatar, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { IconBrandMessenger, IconUser } from '@tabler/icons'
+
 import { IS_USER_ONLINE } from '../../../../graphql'
+import { useStyles } from './styles';
 
 const UserOnline = ({ following, authUserId }) => {
-  const theme = useTheme();
-  const customization = useSelector((state) => state.customization);
-
+  const navigate = useNavigate()
   const { data, loading } = useSubscription(IS_USER_ONLINE, {
     variables: { authUserId, userId: following?.author?.id },
     skip: !following?.author?.isOnline
@@ -18,33 +18,41 @@ const UserOnline = ({ following, authUserId }) => {
   if (!loading && data) {
     isUserOnline = data?.isUserOnline?.isOnline;
   }
+  const classes = useStyles(isUserOnline)
 
+  const goTo = goto => navigate(`/${goto}/${following.author.id}`)
   return (
-    <ListItemButton
-      sx={{
-        borderRadius: `${customization.borderRadius}px`,
-        alignItems: 'flex-start',
-        backgroundColor: 'inherit',
-      }}
-      key={following.id}
-    >
-      <ListItemIcon sx={{ my: 'auto', minWidth: 18, minHeight: 18, display: 'block' }}>
-        <Avatar sizes='small' sx={{ width: 32, height: 32, mr: 1 }} />
-        <Box sx={{ backgroundColor: isUserOnline ? theme.palette.success.dark : theme.palette.dark.light, width: 10, height: 10, borderRadius: 30, position: 'absolute', top: 45, left: 38 }} />
-      </ListItemIcon>
-      <ListItemText
-        primary={
-          <Typography variant={'body1'} color="inherit">
-            {following?.author.fullName}
-          </Typography>
-        }
-        secondary={
-          <Typography variant="caption" sx={{ ...theme.typography.subMenuCaption }} display="block" gutterBottom>
-            {isUserOnline ? 'Active Now' : 'Not Active'}
-          </Typography>
-        }
-      />
-    </ListItemButton >
+    <Box className={classes.chatlist__item}>
+      <Box className={classes.chatlist__item}>
+        <Box className={classes.avatar}>
+          <Avatar alt="..." src={following.author.image} />
+          <Typography className={classes[isUserOnline ? 'active' : 'isOnline']}></Typography>
+        </Box>
+        <Box >
+          <Typography variant="h5" component="div">{following?.author.fullName} </Typography>
+          <Box sx={{ display: 'flex' }}>
+            <ButtonBase onClick={() => goTo('profile')} className={classes.btnBase}>
+              <Avatar
+                variant="rounded"
+                className={classes.buttonBaseStyle}
+                color="inherit"
+              >
+                <IconUser stroke={1.5} size="1.1rem" />
+              </Avatar>
+            </ButtonBase>
+            <ButtonBase onClick={() => goTo('chat')} className={classes.btnBase}>
+              <Avatar
+                variant="rounded"
+                className={classes.buttonBaseStyle}
+                color="inherit"
+              >
+                <IconBrandMessenger stroke={1.5} size="1.1rem" />
+              </Avatar>
+            </ButtonBase>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   )
 }
 export default UserOnline

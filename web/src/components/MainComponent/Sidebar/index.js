@@ -6,8 +6,8 @@ import { BrowserView, MobileView } from 'react-device-detect';
 import { LogoSection } from '../../MainComponent';
 import { drawerWidth } from '../../../redux/reduxConstant';
 import { UserFollowed, UsersList } from './UserList'
-const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
 
+const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
   const theme = useTheme();
   const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -19,8 +19,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
         </Box>
       </Box>
       <BrowserView>
-        <Box
-          component="div"
+        <Box component="div"
           style={{
             height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
             paddingLeft: '16px',
@@ -29,7 +28,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
         >
           <UserFollowed />
           {/* <UserFollowed followed={user?.following} /> */}
-          <UsersList />
+          {/* <UsersList /> */}
         </Box>
       </BrowserView>
       <MobileView>
@@ -41,33 +40,38 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
     </>
   );
 
+
   const container = window !== undefined ? () => window.document.body : undefined;
 
   return (
-    <Box component="nav" sx={{ flexShrink: { md: 0 }, width: matchUpMd ? drawerWidth : 'auto' }} aria-label="mailbox folders">
-      <Drawer
-        container={container}
-        variant={matchUpMd ? 'persistent' : 'temporary'}
-        anchor="left"
-        open={drawerOpen}
-        onClose={drawerToggle}
-        sx={{
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-            background: 'theme.palette.background.default',
-            color: theme.palette.text.primary,
-            borderRight: 'none',
-            [theme.breakpoints.up('md')]: {
-              top: '65px'
+    <Box>
+
+      <Box component="nav" sx={{ flexShrink: { md: 0 }, width: matchUpMd ? drawerWidth : 'auto' }} aria-label="mailbox folders">
+        <Drawer
+          container={container}
+          variant={matchUpMd ? 'persistent' : 'temporary'}
+          anchor="left"
+          open={drawerOpen}
+          onClose={drawerToggle}
+          sx={{
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              background: 'theme.palette.background.default',
+              color: theme.palette.text.primary,
+              borderRight: 'none',
+              [theme.breakpoints.up('md')]: {
+                top: '65px'
+              }
             }
-          }
-        }}
-        ModalProps={{ keepMounted: true }}
-        color="inherit"
-      >
-        {drawer}
-      </Drawer>
+          }}
+          ModalProps={{ keepMounted: true }}
+          color="inherit"
+        >
+          {drawer}
+        </Drawer>
+      </Box>
     </Box>
+
   );
 };
 

@@ -47,6 +47,8 @@ export default gql`
     followingCount:Int!
     notifications: [NotificationPayload]
     newNotifications: [NotificationPayload]
+    newConversations: [ConversationsPayload]
+    unseenMessage: Boolean
     createdAt: String
     updatedAt: String
   }
@@ -75,7 +77,7 @@ export default gql`
   }
 
   extend type Query{
-    me:UserPayload @auth
+    getAuthUser: UserPayload @auth
     getUser(id:ID!):UserPayload @auth
     getUsers: [UserPayload]!  @auth
     searchUsers(searchQuery: String!): [UserPayload] @auth

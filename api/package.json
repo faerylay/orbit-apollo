@@ -36,6 +36,7 @@
     "joi": "^17.6.0",
     "mongoose": "^6.2.3",
     "mongoose-timestamp-date-unix": "^0.6.2",
+    "mongoose-timestamp-plugin": "^0.0.1",
     "subscriptions-transport-ws": "^0.11.0",
     "uuid": "^8.3.2",
     "ws": "^8.5.0"

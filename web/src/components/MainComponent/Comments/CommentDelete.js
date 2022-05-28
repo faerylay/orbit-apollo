@@ -3,7 +3,7 @@ import { IconButton, Typography } from '@mui/material';
 import { useMutation } from '@apollo/client'
 import { useSelector } from 'react-redux';
 import useNotifications from '../../../hooks/useNotifications'
-import { DELETE_COMMENT, FETCH_POSTS_QUERY, ME } from '../../../graphql'
+import { DELETE_COMMENT, FETCH_POSTS_QUERY, GET_AUTH_USER } from '../../../graphql'
 import ErrorOccur from './CommentHelper/ErrorOccur';
 
 
@@ -20,7 +20,7 @@ export default function CommentDelete({ post, commentId, imagePublicId }) {
     },
     refetchQueries: [
       { query: FETCH_POSTS_QUERY },
-      { query: ME },
+      { query: GET_AUTH_USER },
     ]
   })
 

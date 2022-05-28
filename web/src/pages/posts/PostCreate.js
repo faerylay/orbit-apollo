@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client'
 import { useSelector } from 'react-redux';
 import { IconSquarePlus, IconX } from '@tabler/icons';
 import { TextField, Button, Paper, Box, Grid, Typography, Fab, IconButton, Modal } from '@mui/material';
-import { CREATE_POST, FETCH_POSTS_QUERY, FETCH_USER, ME, GET_USER_POSTS, GET_FOLLOWED_POSTS } from '../../graphql';
+import { CREATE_POST, FETCH_POSTS_QUERY, FETCH_USER, GET_AUTH_USER, GET_USER_POSTS, GET_FOLLOWED_POSTS } from '../../graphql';
 import { useInput } from '../../hooks/hooks'
 import { HOME_PAGE_POSTS_LIMIT, PROFILE_PAGE_POSTS_LIMIT, MAX_POST_IMAGE_SIZE, NotificationType } from '../../constants'
 import useNotifications from '../../hooks/useNotifications';
@@ -33,7 +33,7 @@ export default function PostCreate() {
     refetchQueries: [
       { query: FETCH_POSTS_QUERY },
       { query: FETCH_USER, variables: { getUserId: auth?.id } },
-      { query: ME },
+      { query: GET_AUTH_USER },
       { query: GET_USER_POSTS, variables: { userId: auth?.id, offset: 0, limit: PROFILE_PAGE_POSTS_LIMIT } },
       { query: GET_FOLLOWED_POSTS, variables: { userId: auth?.id, offset: 0, limit: HOME_PAGE_POSTS_LIMIT } }
     ]

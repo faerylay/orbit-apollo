@@ -9,7 +9,7 @@ import { styled } from '@mui/material/styles';
 import useClickOutSide from '../../../../hooks/useClickOutSide'
 import NotificationMenu from './NotificationMenu'
 
-import { UPDATE_NOTIFICATION_SEEN, ME, GET_USER_NOTIFICATION } from '../../../../graphql'
+import { UPDATE_NOTIFICATION_SEEN, GET_AUTH_USER, GET_USER_NOTIFICATION } from '../../../../graphql'
 import { NOTI_PAGE_NOTIFICATION_LIMIT } from '../../../../constants';
 
 
@@ -67,7 +67,7 @@ const NotificationList = ({ notification, close }) => {
           }
         },
         refetchQueries: () => [
-          { query: ME },
+          { query: GET_AUTH_USER },
           {
             query: GET_USER_NOTIFICATION,
             variables: {

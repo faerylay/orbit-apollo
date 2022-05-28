@@ -8,11 +8,13 @@ import { useSelector } from 'react-redux';
 import { useMutation } from '@apollo/client';
 
 import MainCard from '../../Helpers/cards/MainCard';
-import { Transitions } from '../../../MainComponent';
 import UpgradePlanCard from './UpgradePlanCard';
+
+import { Transitions } from '../../../MainComponent';
 import { LOG_OUT } from '../../../../graphql'
 import { isLoggedIn, forgetLogin } from '../../../../auth'
 import { useStyles } from './styles';
+
 const ProfileSection = () => {
   const classes = useStyles()
   const theme = useTheme();

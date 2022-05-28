@@ -96,9 +96,8 @@ const SearchAll = () => {
                               inputRef={inputRef}
                               popupState={popupState}
                             >
-                              {isOpenSearchResult && <SearchResult users={users} loading={loading} />}
+                              {isOpenSearchResult && <SearchResult data={users} loading={loading} />}
                             </MobileSearch>
-
                           </Grid>
                         </Grid>
                       </Box>

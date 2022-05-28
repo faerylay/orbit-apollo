@@ -1,70 +1,38 @@
-import { useState } from 'react';
-import { useTheme } from '@mui/material/styles';
-import { Drawer, Fab, Box, Grid, IconButton, Tooltip } from '@mui/material';
-import { IconMessageCircle } from '@tabler/icons';
+import React from 'react'
+import { Grid, Skeleton, useTheme } from '@mui/material';
+import { useParams } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { useQuery } from '@apollo/client';
+import { FETCH_USER } from '../../../graphql'
 
-
-import { AnimateButton } from '../../MainComponent';
-import { gridSpacing } from '../../../redux/reduxConstant';
+import ChatProfile from './ChatProfile'
+import ChatContent from './ChatContent'
 
 const Chat = () => {
-  const theme = useTheme();
-  const [open, setOpen] = useState(false);
-  const handleToggle = () => {
-    setOpen(!open);
-  };
+  const auth = useSelector(state => state?.users?.user);
+  const theme = useTheme()
+  const checkMdSide = { [theme.breakpoints.down('lg')]: { display: 'none' } }
+  const { userId } = useParams();
+  const { data: { getUser } = {}, loading } = useQuery(FETCH_USER, {
+    variables: { getUserId: userId },
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "cache-first"
+  })
+  if (loading) {
+    return (
+      <Skeleton />
+    );
+  }
   return (
     <>
-      <Tooltip title="Live Customize">
-        <Fab
-          component="div"
-          onClick={handleToggle}
-          size="medium"
-          variant="circular"
-          color="secondary"
-          sx={{
-            borderRadius: 0,
-            borderTopLeftRadius: '50%',
-            borderBottomLeftRadius: '50%',
-            borderTopRightRadius: '50%',
-            borderBottomRightRadius: '4px',
-            top: '25%',
-            position: 'fixed',
-            right: 10,
-            zIndex: theme.zIndex.speedDial
-          }}
-        >
-          <AnimateButton>
-            <IconButton color="inherit" size="large" disableRipple>
-              <IconMessageCircle />
-            </IconButton>
-          </AnimateButton>
-        </Fab>
-      </Tooltip>
-
-      <Drawer
-        anchor="right"
-        onClose={handleToggle}
-        open={open}
-        PaperProps={{
-          sx: {
-            width: 280
-          }
-        }}
-      >
-        <Box component="div">
-          <Grid container spacing={gridSpacing} sx={{ p: 3 }}>
-            <Grid item xs={12}>
-
-
-            </Grid>
-            <Grid item xs={12}>
-            </Grid>
-          </Grid>
-        </Box>
-      </Drawer>
+      <Grid item xs={12} md={7} lg={6} sx={{ [theme.breakpoints.down('md')]: { display: 'none' } }}>
+        <ChatContent auth={auth} getUser={getUser} />
+      </Grid>
+      <Grid item lg={3} sx={checkMdSide}>
+        <ChatProfile receiver={getUser} />
+      </Grid>
     </>
-  );
-};
+  )
+}
 
-export default Chat;
+export default Chat

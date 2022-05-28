@@ -7,12 +7,12 @@ import { useQuery } from '@apollo/client';
 
 import MainCard from '../../Helpers/cards/MainCard';
 import { Transitions } from '../../../MainComponent';
-import { GET_USER_NOTIFICATION, ME } from '../../../../graphql'
+import { GET_USER_NOTIFICATION } from '../../../../graphql'
 import { NOTI_PAGE_NOTIFICATION_LIMIT } from '../../../../constants'
 import Notifications from './Notifications';
 import { status } from './utils';
 
-const NotificationSection = () => {
+const NotificationSection = ({ auth }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
   const [limit, setLimit] = useState(NOTI_PAGE_NOTIFICATION_LIMIT);
@@ -39,9 +39,9 @@ const NotificationSection = () => {
     if (event?.target.value) setValue(event?.target.value);
   };
 
-  const { data: { me } = {} } = useQuery(ME);
+
   const variables = {
-    userId: me?.id,
+    userId: auth?.id,
     offset: 0,
     limit,
   };
@@ -82,7 +82,7 @@ const NotificationSection = () => {
         </ButtonBase>
       </Box>
       <Popper
-        placement={matchesXs ? 'bottom' : 'bottom-end'}
+        placement="bottom-end"
         open={open}
         anchorEl={anchorRef.current}
         role={undefined}

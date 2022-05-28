@@ -4,7 +4,7 @@ import { ButtonBase, InputAdornment, } from '@mui/material';
 import { IconAdjustmentsHorizontal, IconSearch } from '@tabler/icons';
 import { OutlineInputStyle, HeaderAvatarStyle } from './styles';
 
-const SearchInput = ({ onChange, onFocus, value, inputRef, children, }) => {
+const SearchInput = ({ onChange, onFocus, value, inputRef, children }) => {
   const theme = useTheme();
   return (
     <>

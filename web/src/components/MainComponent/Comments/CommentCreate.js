@@ -10,7 +10,7 @@ import Editor from '@draft-js-plugins/editor';
 import createMentionPlugin from '@draft-js-plugins/mention';
 import "@draft-js-plugins/mention/lib/plugin.css";
 
-import { CREATE_COMMENT, FETCH_POSTS_QUERY, FETCH_POST, ME, USER_MENTION } from '../../../graphql';
+import { CREATE_COMMENT, FETCH_POSTS_QUERY, FETCH_POST, GET_AUTH_USER, USER_MENTION } from '../../../graphql';
 import { NotificationType } from '../../../constants'
 import useNotifications from '../../../hooks/useNotifications'
 import { editorContent, mentionList, handlePostImageUpload, editorStyle } from './CommentHelper';
@@ -43,7 +43,7 @@ const CommentCreate = ({ postId, author }) => {
     refetchQueries: [
       { query: FETCH_POSTS_QUERY },
       { query: FETCH_POST, variables: { postId } },
-      { query: ME },
+      { query: GET_AUTH_USER },
     ]
   })
 

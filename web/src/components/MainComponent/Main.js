@@ -7,8 +7,7 @@ import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material'
 
 import Header from './Header';
 import Sidebar from './Sidebar';
-import Chat from './Chat';
-import { NOTIFICATION_CREATED_OR_DELETED, ME } from '../../graphql'
+import { NOTIFICATION_CREATED_OR_DELETED, GET_AUTH_USER, GET_NEW_CONVERSATIONS_SUBSCRIPTION } from '../../graphql'
 import { SET_MENU, addUser } from '../../redux';
 import { Main } from './mainStyle'
 import NotFound from './Helpers/NotFound';
@@ -24,14 +23,15 @@ const MainComponent = () => {
     dispatch(SET_MENU(!leftDrawerOpened));
   };
 
-  const { loading, subscribeToMore, data, error } = useQuery(ME);
+  const { loading, subscribeToMore, data, error } = useQuery(GET_AUTH_USER);
 
   useEffect(() => {
     if (!loading) {
-      dispatch(addUser(data?.me))
+      dispatch(addUser(data?.getAuthUser))
     }
     dispatch(SET_MENU(!matchDownMd))
   }, [dispatch, loading, data, matchDownMd])
+
 
   useEffect(() => {
     const unsubscribe = subscribeToMore({
@@ -39,25 +39,33 @@ const MainComponent = () => {
       updateQuery: async (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
 
-        const oldNotifications = prev.me.newNotifications;
+        const oldNotifications = prev.getAuthUser.newNotifications;
         const { operation, notification } = subscriptionData.data.notificationCreatedOrDeleted;
-
-        let newNotifications;
+        let newNotifications = [];
 
         if (operation === 'CREATE') {
+          // Don't show message notification in Header if user already is on notifications page
+          if (window.location.href.split('/')[3] === 'notifications') {
+            return prev;
+          }
+
+          // Add new notification
           newNotifications = [notification, ...oldNotifications];
         } else {
+          // Remove from notifications
           const notifications = oldNotifications;
           const index = notifications.findIndex((n) => n.id === notification.id);
           if (index > -1) {
             notifications.splice(index, 1);
           }
+
           newNotifications = notifications;
         }
-        Object.assign({}, prev.me, {
+        // Attach new notifications to authUser
+        const authUser = Object.assign({}, prev.getAuthUser, {
           newNotifications: newNotifications
         })
-        return prev.me
+        return { getAuthUser: authUser }
       },
     });
 
@@ -65,6 +73,50 @@ const MainComponent = () => {
       unsubscribe();
     };
   }, [subscribeToMore]);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToMore({
+      document: GET_NEW_CONVERSATIONS_SUBSCRIPTION,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+
+        const oldConversations = prev.getAuthUser.newConversations;
+        const { newConversation } = subscriptionData.data;
+
+        // Don't show message notification in Header if user already is on messages page
+        if (window.location.href.split('/')[3] === 'messages') {
+          return prev;
+        }
+
+        // If authUser already has unseen message from that user,
+        // remove old message, so we can show the new one
+        const index = oldConversations.findIndex((u) => u.id === newConversation.id);
+        if (index > -1) {
+          oldConversations.splice(index, 1);
+        }
+
+        // Merge conversations
+        const mergeConversations = [newConversation, ...oldConversations];
+
+        // Attach new conversation to authUser
+        // const authUser = prev.getAuthUser;
+        // authUser.newConversations = mergeConversations;
+
+        const authUser = Object.assign({}, prev.getAuthUser, {
+          newConversations: mergeConversations
+        })
+        return { getAuthUser: authUser }
+      },
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [subscribeToMore]);
+
+
+
+
 
   let location = useLocation();
 
@@ -102,15 +154,17 @@ const MainComponent = () => {
         }}
       >
         <Toolbar variant='dense' sx={{ py: 1 }}>
-          <Header handleLeftDrawerToggle={handleLeftDrawerToggle} />
+          <Header handleLeftDrawerToggle={handleLeftDrawerToggle} auth={data?.getAuthUser} />
         </Toolbar>
       </AppBar>
-
-      <Sidebar drawerOpen={leftDrawerOpened} drawerToggle={handleLeftDrawerToggle} />
-      <Main theme={theme} open={leftDrawerOpened}>
+      {
+        !location.pathname.includes('/chat') && (
+          <Sidebar drawerOpen={leftDrawerOpened} drawerToggle={handleLeftDrawerToggle} />
+        )
+      }
+      <Main theme={theme} open={leftDrawerOpened} location={location}>
         <Outlet />
       </Main>
-      <Chat />
     </Box>
   );
 };

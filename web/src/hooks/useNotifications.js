@@ -1,6 +1,6 @@
 import { useApolloClient } from '@apollo/client'
 import { useSelector } from 'react-redux'
-import { CREATE_NOTIFICATION, DELETE_NOTIFICATION, GET_USER_NOTIFICATION, ME, FETCH_POSTS_QUERY } from '../graphql';
+import { CREATE_NOTIFICATION, DELETE_NOTIFICATION, GET_USER_NOTIFICATION, GET_AUTH_USER, FETCH_POSTS_QUERY } from '../graphql';
 import { NOTI_PAGE_NOTIFICATION_LIMIT } from '../constants/DataLimit'
 
 const useNotifications = () => {
@@ -18,7 +18,7 @@ const useNotifications = () => {
         mutation,
         variables: { input: { ...variables } },
         refetchQueries: () => [
-          { query: ME },
+          { query: GET_AUTH_USER },
           { query: FETCH_POSTS_QUERY },
           { query: GET_USER_NOTIFICATION, variables: variable }
         ]

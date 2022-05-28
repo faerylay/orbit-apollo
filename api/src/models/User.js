@@ -67,15 +67,15 @@ const userSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Notification'
     }
-  ]
+  ],
   // passwordResetToken: String,
   // passwordResetTokenExpiry: Date,
-  // messages: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: 'User'
-  //   }
-  // ]
+  messages: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  ]
 }, {
   timestamps: true
 })

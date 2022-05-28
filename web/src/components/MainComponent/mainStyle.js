@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import { drawerWidth } from '../../redux/reduxConstant';
-export const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
+export const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open, location }) => ({
   ...theme.typography.mainContent,
   ...(!open && {
     borderBottomLeftRadius: 0,
@@ -10,7 +10,7 @@ export const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open
       duration: theme.transitions.duration.leavingScreen
     }),
     [theme.breakpoints.up('md')]: {
-      marginLeft: -(drawerWidth - 20),
+      marginLeft: !location.pathname.includes('/chat') ? -(drawerWidth - 20) : null,
       width: `calc(100% - ${drawerWidth}px)`
     },
     [theme.breakpoints.down('md')]: {

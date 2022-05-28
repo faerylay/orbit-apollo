@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
 import { TextField, Button, Box, Grid, Typography, Fab, IconButton, Modal } from '@mui/material';
 import { IconSquarePlus, IconX } from '@tabler/icons';
-import { UPDATE_POST, FETCH_POSTS_QUERY, ME, CREATE_POST_UPDATED_HISTORY, POST_UPDATED_HISTORIES } from '../../../graphql';
+import { UPDATE_POST, FETCH_POSTS_QUERY, GET_AUTH_USER, CREATE_POST_UPDATED_HISTORY, POST_UPDATED_HISTORIES } from '../../../graphql';
 import { useModify } from '../../../hooks/hooks'
 import { MAX_POST_IMAGE_SIZE } from '../../../constants'
 import { modalStyle } from './styles';
@@ -50,7 +50,7 @@ export default function PostUpdating(props) {
     },
     refetchQueries: [
       { query: FETCH_POSTS_QUERY },
-      { query: ME },
+      { query: GET_AUTH_USER },
       { query: POST_UPDATED_HISTORIES, variables: { postId: props?.postId } },
     ]
   })

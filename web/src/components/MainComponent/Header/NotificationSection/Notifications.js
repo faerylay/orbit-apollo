@@ -17,10 +17,10 @@ const Notifications = ({ variables, data, loading, fetchMore, networkStatus, set
     py: 0,
     borderRadius: '10px',
     backgroundColor: theme.palette.background.paper,
-    [theme.breakpoints.down('md')]: {
-      minWidth: '100%',
-      maxWidth: 330,
-    },
+    // [theme.breakpoints.down('md')]: {
+    //   minWidth: '100%',
+    //   maxWidth: 330,
+    // },
     '& .MuiListItemSecondaryAction-root': {
       top: 25
     },

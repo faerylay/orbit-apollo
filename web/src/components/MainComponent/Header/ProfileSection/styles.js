@@ -31,9 +31,9 @@ export const useStyles = makeStyles((theme) => createStyles({
     minWidth: 300,
     backgroundColor: theme.palette.background.paper,
     borderRadius: '10px',
-    [theme.breakpoints.down('md')]: {
-      minWidth: '100%'
-    },
+    // [theme.breakpoints.down('md')]: {
+    //   minWidth: '100%'
+    // },
     '& .MuiListItemButton-root': {
       mt: 0.5
     }

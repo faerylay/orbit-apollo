@@ -1,4 +1,4 @@
-
+import Message from './Message'
 import UserMention from './UserMention'
 import Notification from './Notification'
 import Follow from './Follow'
@@ -10,4 +10,4 @@ import Post from './Post'
 import User from './User'
 import root from './root'
 
-export default [root, User, Post, PostUpdatedHistory, Like, Comment, CommentLikes, Follow, Notification, UserMention]
+export default [root, User, Post, PostUpdatedHistory, Like, Comment, CommentLikes, Follow, Notification, UserMention, Message]

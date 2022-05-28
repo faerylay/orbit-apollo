@@ -8,7 +8,7 @@ import { Box, Fab, Avatar, Typography } from '@mui/material';
 
 
 import { MAX_USER_PROFILE_IMAGE_SIZE } from '../../../constants'
-import { UPLOAD_PHOTO, ME, FETCH_USER, FETCH_ALL_USERS } from '../../../graphql'
+import { UPLOAD_PHOTO, GET_AUTH_USER, FETCH_USER, FETCH_ALL_USERS } from '../../../graphql'
 
 
 const ProfileImage = ({ getUser, isUserOnline, userId }) => {
@@ -43,7 +43,7 @@ const ProfileImage = ({ getUser, isUserOnline, userId }) => {
           }
         },
         refetchQueries: () => [
-          { query: ME },
+          { query: GET_AUTH_USER },
           { query: FETCH_USER, variables: { getUserId: getUser.id } },
           { query: FETCH_ALL_USERS }
         ],
