@@ -9,14 +9,13 @@ import { styled } from '@mui/material/styles';
 import useClickOutSide from '../../../../hooks/useClickOutSide'
 import NotificationMenu from './NotificationMenu'
 
-import { UPDATE_NOTIFICATION_SEEN, ME, GET_USER_NOTIFICATION } from '../../../../graphql'
+import { UPDATE_NOTIFICATION_SEEN, GET_AUTH_USER, GET_USER_NOTIFICATION } from '../../../../graphql'
 import { NOTI_PAGE_NOTIFICATION_LIMIT } from '../../../../constants';
-import { textEllipsis } from './styles'
+
 
 const NotificationList = ({ notification, close }) => {
   const ref = React.useRef(null);
   useClickOutSide(ref, close);
-
   const navigate = useNavigate()
   const client = useApolloClient()
   const auth = useSelector(state => state?.users?.user)
@@ -28,6 +27,10 @@ const NotificationList = ({ notification, close }) => {
     initialRender = 'liked your Post'
     goTo = `/single-post/${notification?.like?.post?.id}`
     description = notification?.like?.post?.title
+  } else if (notification?.mention) {
+    initialRender = 'mentioned you in thier comments'
+    goTo = `/single-post/${notification?.comment?.post?.id}`
+    description = notification?.comment?.comment
   }
   else if (notification?.commentlikes) {
     initialRender = 'liked your comment '
@@ -52,6 +55,7 @@ const NotificationList = ({ notification, close }) => {
     goTo = 'ok'
     description = 'ok'
   }
+
   const updateNotificationSeen = async () => {
     try {
       await client.mutate({
@@ -63,7 +67,7 @@ const NotificationList = ({ notification, close }) => {
           }
         },
         refetchQueries: () => [
-          { query: ME },
+          { query: GET_AUTH_USER },
           {
             query: GET_USER_NOTIFICATION,
             variables: {
@@ -104,7 +108,14 @@ const NotificationList = ({ notification, close }) => {
         }
           secondary={
             <>
-              <Typography sx={textEllipsis} variant="caption">{description}</Typography>
+              <Typography variant="caption" sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: '2',
+                WebkitBoxOrient: 'vertical',
+              }}
+              >{description}</Typography>
               <Typography variant="caption" >
                 {moment.unix(notification?.createdAt).fromNow()}
               </Typography>

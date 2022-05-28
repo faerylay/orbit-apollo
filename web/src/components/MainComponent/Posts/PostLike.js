@@ -6,7 +6,7 @@ import { IconThumbUp } from '@tabler/icons';
 import { useMutation } from '@apollo/client'
 import useNotifications from '../../../hooks/useNotifications'
 import { NotificationType } from '../../../constants/NotificationType';
-import { LIKE_POST, FETCH_POSTS_QUERY, FETCH_POST, ME, FETCH_USER, FETCH_ALL_USERS, GET_FOLLOWED_POSTS, GET_USER_POSTS } from '../../../graphql'
+import { LIKE_POST, FETCH_POSTS_QUERY, FETCH_POST, GET_AUTH_USER, FETCH_USER, FETCH_ALL_USERS, GET_FOLLOWED_POSTS, GET_USER_POSTS } from '../../../graphql'
 import { PROFILE_PAGE_POSTS_LIMIT, HOME_PAGE_POSTS_LIMIT } from '../../../constants/DataLimit'
 
 export default function LikePost({ postId, author, likes }) {
@@ -26,7 +26,7 @@ export default function LikePost({ postId, author, likes }) {
       }
     },
     refetchQueries: () => [
-      { query: ME },
+      { query: GET_AUTH_USER },
       { query: FETCH_USER, variables: { getUserId: author?.id } },
       { query: FETCH_ALL_USERS },
       { query: GET_FOLLOWED_POSTS, variables: { userId: auth?.id, offset: 0, limit: HOME_PAGE_POSTS_LIMIT } },

@@ -1,42 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
-import { TextField, Button, Box, Grid, Typography } from '@mui/material';
-
-import { UPDATE_POST, FETCH_POSTS_QUERY, ME, CREATE_POST_UPDATED_HISTORY, POST_UPDATED_HISTORIES } from '../../../graphql';
+import { TextField, Button, Box, Grid, Typography, Fab, IconButton, Modal } from '@mui/material';
+import { IconSquarePlus, IconX } from '@tabler/icons';
+import { UPDATE_POST, FETCH_POSTS_QUERY, GET_AUTH_USER, CREATE_POST_UPDATED_HISTORY, POST_UPDATED_HISTORIES } from '../../../graphql';
 import { useModify } from '../../../hooks/hooks'
 import { MAX_POST_IMAGE_SIZE } from '../../../constants'
-
+import { modalStyle } from './styles';
 export default function PostUpdating(props) {
   const navigate = useNavigate()
   const auth = useSelector(state => state?.users?.user)
-  const [errors, setErrors] = useState('')
+
   let title = useModify(props.title)
   let description = useModify(props.description)
 
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState(null);
+  const [errors, setErrors] = useState('')
+  const [image, setImage] = useState([]);
+
   useEffect(() => {
-    if (selectedImage) {
-      setImageUrl(URL.createObjectURL(selectedImage));
+    const onImage = async (imgUrl) => {
+      const response = await fetch(imgUrl);
+      const blob = await response.blob();
+      const file = new File([blob], "image." + imgUrl.split(/[#?]/)[0]
+        .split(".")
+        .pop()
+        .trim(), {
+        type: blob.type,
+      });
+      return file
     }
-  }, [selectedImage]);
+    const fileArr = props?.image?.map(item => onImage(item))
+    Promise.all(fileArr).then(result => setImage(result))
+  }, [props?.image])
+
 
   const [updatePost, { loading }] = useMutation(UPDATE_POST, {
-    update(proxy, result) {
-      setTimeout(() => navigate('/'), 100)
-      // const data = proxy.readQuery({
-      //   query: FETCH_POSTS_QUERY
-      // })
-      // proxy.writeQuery({
-      //   query: FETCH_POSTS_QUERY,
-      //   data: { getPosts: [...data.getPosts, result.data.updatePost] }
-      // });
-      title = ''
-      description = ''
-      setErrors('')
-    },
     onError(err) {
       setErrors(err.graphQLErrors[0].message);
     },
@@ -45,13 +44,13 @@ export default function PostUpdating(props) {
         postId: props.postId,
         title: title.value,
         description: description.value,
-        image: selectedImage,
+        image,
         imagePublicId: props.imagePublicId
       }
     },
     refetchQueries: [
       { query: FETCH_POSTS_QUERY },
-      { query: ME },
+      { query: GET_AUTH_USER },
       { query: POST_UPDATED_HISTORIES, variables: { postId: props?.postId } },
     ]
   })
@@ -69,13 +68,13 @@ export default function PostUpdating(props) {
   })
   const handlePostImageUpload = (e) => {
 
-    const file = e.target.files[0];
+    const file = e.target.files;
     if (!file) return;
     if (file.size >= MAX_POST_IMAGE_SIZE) {
       console.error(`File size should be less then ${MAX_POST_IMAGE_SIZE / 1000000}MB`);
       return;
     }
-    setSelectedImage(file)
+    setImage([...image, ...file]);
     e.target.value = null;
   }
 
@@ -83,8 +82,22 @@ export default function PostUpdating(props) {
     e.preventDefault()
     await createPostUpdatedHistory()
     await updatePost()
+    title = ''
+    description = ''
+    setImage([])
+    setErrors('')
+    navigate('/')
   }
-
+  const [open, setOpen] = useState(false);
+  const [preview, setPreview] = useState('')
+  const handleOpen = (img) => {
+    setOpen(true);
+    setPreview(img)
+  }
+  const handleClose = () => {
+    setOpen(false)
+    setPreview('')
+  };
 
   return (
     <Box>
@@ -126,19 +139,53 @@ export default function PostUpdating(props) {
               required
             />
             <Box sx={{ display: 'flex' }}>
-              <input
-                accept="image/*"
-                type="file"
-                id="select-image"
-                style={{ display: 'none' }}
-                onChange={handlePostImageUpload}
-              />
-              <label htmlFor="select-image">
-                <Button variant="outlined" color="secondary" component="span">
-                  Upload Image
-                </Button>
+              <label htmlFor="postUpdateImage">
+                <input
+                  style={{ display: "none" }}
+                  id="postUpdateImage"
+                  name="postUpdateImage"
+                  type="file"
+                  multiple
+                  accept="image/x-png,image/jpeg"
+                  onChange={handlePostImageUpload}
+                />
+                <Fab
+                  color="inherit"
+                  size="small"
+                  component="span"
+                  aria-label="add"
+                  variant="extended"
+                  sx={{ width: 60, height: 40 }}
+                  disableRipple={true}
+                  disableFocusRipple={true}
+                >
+                  <IconSquarePlus />
+                </Fab>
               </label>
-              <img src={imageUrl ? imageUrl : props.image} alt={imageUrl ? imageUrl : props.image} height="40px" width="60px" style={{ padding: 3, borderRadius: 10 }} />
+              <Box sx={{ width: '100%', height: 50, display: 'flex', overflow: 'scroll', ml: 5 }}>
+                {image.map((url, index) => (
+                  <Box key={index.toString()} sx={{ display: 'flex', overflow: 'hidden' }} >
+                    <IconButton onClick={() => setImage(image.filter(item => item !== url))} sx={{ position: 'absolute', background: 'red', borderRadius: 1 }}>
+                      <IconX size={10} color="#fff" stroke={3} />
+                    </IconButton>
+                    <img onClick={() => handleOpen(URL.createObjectURL(url))} src={URL.createObjectURL(url)} alt="..." style={{ borderRadius: 5, marginRight: 5, width: 100, height: 50 }} />
+                  </Box>
+                ))}
+                <Modal
+                  keepMounted
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="keep-mounted-modal-image"
+                  aria-describedby="keep-mounted-modal-description"
+                >
+                  <Box sx={modalStyle}>
+                    <IconButton onClick={handleClose} sx={{ position: 'absolute', background: 'red', borderRadius: 1, width: 30, height: 30 }}>
+                      <IconX size={20} color="#fff" stroke={5} />
+                    </IconButton>
+                    <img id="keep-mounted-modal-image" src={preview ? preview : null} alt='...' style={{ borderRadius: 5, marginRight: 5, width: '100%', height: 300 }} />
+                  </Box>
+                </Modal>
+              </Box>
             </Box>
 
           </Grid>

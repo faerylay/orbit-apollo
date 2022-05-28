@@ -30,6 +30,9 @@ export const GET_USER_NOTIFICATION = gql`
         id
         seen
         createdAt
+        mention{
+          id
+        }
         author {
           id
           image

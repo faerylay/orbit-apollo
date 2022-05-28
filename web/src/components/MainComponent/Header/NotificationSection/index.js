@@ -2,19 +2,17 @@ import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, Button, ButtonBase, CardActions, Chip, ClickAwayListener, Divider, Grid, Paper, Popper, Stack, TextField, Typography, useMediaQuery, Badge } from '@mui/material';
-import { useSelector } from 'react-redux';
 import { IconBell } from '@tabler/icons';
-import { useLazyQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 import MainCard from '../../Helpers/cards/MainCard';
 import { Transitions } from '../../../MainComponent';
-
 import { GET_USER_NOTIFICATION } from '../../../../graphql'
 import { NOTI_PAGE_NOTIFICATION_LIMIT } from '../../../../constants'
 import Notifications from './Notifications';
 import { status } from './utils';
 
-const NotificationSection = () => {
+const NotificationSection = ({ auth }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
   const [limit, setLimit] = useState(NOTI_PAGE_NOTIFICATION_LIMIT);
@@ -41,34 +39,21 @@ const NotificationSection = () => {
     if (event?.target.value) setValue(event?.target.value);
   };
 
-  const auth = useSelector(state => state?.users?.user)
+
   const variables = {
     userId: auth?.id,
     offset: 0,
     limit,
   };
-  const [getNoti, { data, loading, fetchMore, networkStatus }] = useLazyQuery(GET_USER_NOTIFICATION, {
+
+  const { data, loading, fetchMore, networkStatus } = useQuery(GET_USER_NOTIFICATION, {
     variables,
     notifyOnNetworkStatusChange: true,
   });
 
-  useEffect(() => {
-    if (auth?.id) {
-      getNoti();
-    }
-  }, [getNoti, auth]);
-
   return (
     <>
-      <Box
-        sx={{
-          ml: 2,
-          mr: 3,
-          [theme.breakpoints.down('md')]: {
-            mr: 2
-          }
-        }}
-      >
+      <Box sx={{ ml: 2, mr: 3, [theme.breakpoints.down('md')]: { mr: 2 } }} >
         <ButtonBase sx={{ borderRadius: '12px' }}>
           <Avatar
             variant="rounded"
@@ -97,7 +82,7 @@ const NotificationSection = () => {
         </ButtonBase>
       </Box>
       <Popper
-        placement={matchesXs ? 'bottom' : 'bottom-end'}
+        placement="bottom-end"
         open={open}
         anchorEl={anchorRef.current}
         role={undefined}

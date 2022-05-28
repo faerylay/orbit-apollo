@@ -1,146 +1,111 @@
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState, } from 'react'
 import { useMutation, useApolloClient } from '@apollo/client'
 import { useSelector } from 'react-redux';
 
-import { Paper, TextField, Button, Box, Grid, Fab, Typography, Avatar } from '@mui/material';
+import { Button, Box, Grid, Fab, Typography } from '@mui/material';
 import { IconSquarePlus } from '@tabler/icons';
 
-import { CREATE_COMMENT, FETCH_POSTS_QUERY, FETCH_POST, ME, USER_MENTION } from '../../../graphql';
-import { MAX_POST_IMAGE_SIZE, NotificationType } from '../../../constants'
-import useNotifications from '../../../hooks/useNotifications'
+import { EditorState, convertToRaw } from 'draft-js';
+import Editor from '@draft-js-plugins/editor';
+import createMentionPlugin from '@draft-js-plugins/mention';
+import "@draft-js-plugins/mention/lib/plugin.css";
 
-// import { MentionsInput, Mention } from 'react-mentions'
+import { CREATE_COMMENT, FETCH_POSTS_QUERY, FETCH_POST, GET_AUTH_USER, USER_MENTION } from '../../../graphql';
+import { NotificationType } from '../../../constants'
+import useNotifications from '../../../hooks/useNotifications'
+import { editorContent, mentionList, handlePostImageUpload, editorStyle } from './CommentHelper';
+
 const CommentCreate = ({ postId, author }) => {
+  const ref = useRef(null);
+  const focusEditor = () => ref.current.focus();
   const client = useApolloClient()
   const notification = useNotifications()
   const auth = useSelector(state => state?.users?.user)
 
-  const [errors, setErrors] = useState('')
-  const [text, setText] = useState('')
   const [image, setImage] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
+  const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+  const [open, setOpen] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
 
-  const [userList, setUserList] = useState([])
-  const [mentions, setMentions] = useState([])
-  const [isOpenSearchResult, setIsOpenSearchResult] = useState(false)
+  const rawEditorContent = convertToRaw(editorState.getCurrentContent());
+  const commentText = editorContent(rawEditorContent)
+  const mentions = mentionList(rawEditorContent)
 
-  const [createComment, { loading }] = useMutation(CREATE_COMMENT, {
-    onError(err) {
-      setErrors(err?.graphQLErrors[0]?.message)
-    },
+  const [createComment, { loading, error }] = useMutation(CREATE_COMMENT, {
     variables: {
       input: {
         postId,
-        comment: text,
+        comment: commentText,
         image: image ? image : null,
-        mentions: mentions ? mentions : null
+        mentions: mentions.length ? mentions : null
       }
     },
     refetchQueries: [
       { query: FETCH_POSTS_QUERY },
       { query: FETCH_POST, variables: { postId } },
-      { query: ME },
+      { query: GET_AUTH_USER },
     ]
   })
 
-  const handlePostImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (file.size >= MAX_POST_IMAGE_SIZE) {
-      console.error(`File size should be less then ${MAX_POST_IMAGE_SIZE / 1000000}MB`);
-      return;
-    }
-    setImage(file);
-    e.target.value = null;
-  }
+  const { MentionSuggestions, plugins } = useMemo(() => {
+    const mentionPlugin = createMentionPlugin({ mentionPrefix: '@' })
+    const { MentionSuggestions } = mentionPlugin;
+    const plugins = [mentionPlugin];
+    return { plugins, MentionSuggestions };
+  }, []);
 
-  if (isOpenSearchResult && searchQuery) {
-    const search = async () => {
-      const { data } = await client.query({
-        query: USER_MENTION,
-        variables: {
-          searchQuery: searchQuery,
-          postId
-        },
-      });
-      setUserList(data.userMentionSearch)
-    };
-    search()
-  }
+  const onOpenChange = useCallback((_open) => {
+    setOpen(_open);
+  }, []);
 
-  const handleInputChange = (e) => {
-    const value = e.target.value
-    const format = /@[A-Za-z0-9]{1,30}$/g;
-    if (format.test(value)) {
-      setIsOpenSearchResult(true)
-      setSearchQuery(value?.match(format)?.toString()?.replace(/[@]/, ' ')?.trim())
-    } else {
-      setIsOpenSearchResult(false)
-    }
-    setText(value)
-  }
-
-  const startMention = (e, user) => {
-    setText(text.substring(0, text.lastIndexOf('@') + 1) + user.fullName)
-    setMentions([...mentions, { userId: user.id, fullName: user.fullName }])
-    setIsOpenSearchResult(false)
-  }
+  const onSearchChange = useCallback(async ({ value }) => {
+    const { data } = await client.query({
+      query: USER_MENTION,
+      variables: {
+        searchQuery: value,
+        postId
+      },
+    });
+    const result = data.userMentionSearch.map(({ id, fullName: name, image: avatar }) => ({ id, name, avatar }));
+    setSuggestions(result);
+  }, [setSuggestions, postId, client]);
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     const { data } = await createComment()
-    setText('')
-    setErrors('')
-    setImage('')
-    setMentions([])
-    setIsOpenSearchResult(false)
-    if (auth?.id !== author?.id) {
+    const mention = mentions?.map(item => item?.userId)
+    if (mention.length || auth?.id !== author?.id) {
       notification.create({
         userId: author?.id,
         postId,
+        mentions: mention,
         notificationType: NotificationType.COMMENT,
         notificationTypeId: data?.createComment?.id,
-      });
+      })
     }
+    setEditorState(EditorState.createEmpty())
+    setImage('')
   }
-
-
+  if (error) return <Typography>Something wrong creating comment</Typography>
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={2} justify='center'>
         <Grid item xs={12}>
-          <TextField
-            value={text}
-            onChange={handleInputChange}
-            error={errors ? true : false}
-            type='text'
-            label='Comment'
-            variant='outlined'
-            placeholder='Comment Something...'
-            fullWidth
-            required
-            autoComplete='off'
-          />
-          {
-            isOpenSearchResult && (
-              <Paper elevation={3} sx={{ position: 'absolute', zIndex: 9999, ml: 20, px: 3, py: 1 }}>
-                <Box sx={{ px: 3, py: 1 }}>
-                  {
-                    userList?.map(user => (
-                      <Box key={user.id} sx={{ display: 'flex', justifyContent: 'space-between', py: .5 }}>
-                        <Box sx={{ mr: 2 }}>
-                          {user.image ? (
-                            <img src={user.image} alt={'.'} style={{ width: 40, height: 40, borderRadius: 50 }} />
-                          ) : <Avatar sx={{ width: 40, height: 40, mr: 0 }} />}
-                        </Box>
-                        <Typography sx={{ py: 1 }} onClick={(e) => startMention(e, user)}>{user.fullName}</Typography>
-                      </Box>
-                    ))
-                  }
-                </Box>
-              </Paper>
-            )
-          }
+          <Box sx={editorStyle} onClick={() => focusEditor()}   >
+            <Editor
+              editorKey={'editor'}
+              editorState={editorState}
+              onChange={setEditorState}
+              plugins={plugins}
+              ref={ref}
+            />
+            <MentionSuggestions
+              open={open}
+              onOpenChange={onOpenChange}
+              suggestions={suggestions}
+              onSearchChange={onSearchChange}
+            />
+          </Box>
         </Grid>
         <Grid item xs={12}>
           <Box sx={{ display: 'flex' }}>
@@ -151,7 +116,7 @@ const CommentCreate = ({ postId, author }) => {
                 name="commentImage"
                 type="file"
                 accept="image/x-png,image/jpeg"
-                onChange={handlePostImageUpload}
+                onChange={(e) => handlePostImageUpload(e, setImage)}
               />
               <Fab
                 color="inherit"
@@ -159,7 +124,7 @@ const CommentCreate = ({ postId, author }) => {
                 component="span"
                 aria-label="add"
                 variant="extended"
-                sx={{ width: 60, height: 50, boxShadow: 'none' }}
+                sx={{ width: 60, height: 50, boxShadow: 'none', zIndex: 1 }}
                 disableRipple={true}
                 disableFocusRipple={true}
               >

@@ -6,7 +6,6 @@ export default gql`
     FOLLOW
     COMMENT
     COMMENTLIKES
-    USERMENTION
     POSTCREATED
   }
 
@@ -33,6 +32,7 @@ export default gql`
     id: ID
     user: UserPayload
     author: UserPayload
+    mention: UserPayload
     like: LikePayload
     follow: Follow
     comment: CommentPayload
@@ -49,6 +49,7 @@ export default gql`
   input CreateNotificationInput {
     userId: ID!
     authorId: ID!
+    mentions: [ID!]
     postId: ID
     commentId: ID
     notificationType: NotificationType!

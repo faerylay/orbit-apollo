@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client'
 import { useTheme } from '@mui/material/styles';
 import { Typography, IconButton } from '@mui/material';
 
-import { CREATE_COMMENT_LIKES, FETCH_POST, ME } from '../../../graphql'
+import { CREATE_COMMENT_LIKES, FETCH_POST, GET_AUTH_USER } from '../../../graphql'
 import useNotifications from '../../../hooks/useNotifications';
 import { NotificationType } from '../../../constants';
 
@@ -20,7 +20,7 @@ const CommentLike = ({ comment, author, postId }) => {
       }
     },
     refetchQueries: () => [
-      { query: ME },
+      { query: GET_AUTH_USER },
       { query: FETCH_POST, variables: { postId } },
     ]
   })

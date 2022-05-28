@@ -11,6 +11,7 @@ const MobileSearch = ({ onChange, onFocus, value, inputRef, children, popupState
   return (
     <>
       <OutlineInputStyle
+        autoComplete='off'
         id="input-search-header"
         onChange={onChange}
         onFocus={onFocus}

@@ -3,7 +3,7 @@ import timestamps from 'mongoose-timestamp-date-unix'
 const postUpdatedHistorySchema = new mongoose.Schema({
   title: String,
   description: String,
-  image: String,
+  image: [String],
   post: {
     type: mongoose.Types.ObjectId,
     ref: 'Post'

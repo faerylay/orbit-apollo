@@ -11,6 +11,7 @@ const resolvers = {
       const notifications = await Notification.where({ user: userId })
         .populate('author')
         .populate('user')
+        .populate('mention')
         .populate('follow')
         .populate('post')
         .populate({ path: 'commentlikes', populate: { path: 'comment' } })
@@ -23,27 +24,58 @@ const resolvers = {
     }
   },
   Mutation: {
-    createNotification: async (parent, { input: { userId, authorId, postId, commentId, notificationType, notificationTypeId } }, context, info) => {
+    createNotification: async (parent, { input: { userId, authorId, postId, mentions, commentId, notificationType, notificationTypeId } }, context, info) => {
       let newNotification
-
       if (notificationType === 'POSTCREATED') {
-        const followerUsers = await Follow.find({ author: userId })
-        for (const follower of followerUsers) {
-          newNotification = await Notification.create([{
+        const followerUsers = await Follow.find({ follower: userId }).select('-authorId')
+        if (followerUsers.length) {
+          for (const follower of followerUsers) {
+            newNotification = await Notification.create([{
+              author: authorId,
+              user: follower.author,
+              post: postId,
+              comment: commentId,
+              [notificationType.toLowerCase()]: notificationTypeId
+            }])
+          }
+          newNotification = newNotification[0]
+          for (const follower of followerUsers) {
+            await User.updateMany({ _id: follower.follower }, {
+              $push: { notifications: newNotification.id }
+            })
+          }
+        }
+      }
+      if (notificationType === 'COMMENT') {
+        if (mentions.length) {
+          for (const mention of mentions) {
+            newNotification = await Notification.create([{
+              author: authorId,
+              user: mention,
+              mention: mention,
+              post: postId,
+              comment: commentId,
+              [notificationType.toLowerCase()]: notificationTypeId
+            }])
+          }
+          newNotification = newNotification[0]
+          for (const mention of mentions) {
+            await User.updateMany({ _id: mention }, {
+              $push: { notifications: newNotification.id }
+            })
+          }
+        } else {
+          newNotification = await new Notification({
             author: authorId,
-            user: follower.follower,
+            user: userId,
             post: postId,
             comment: commentId,
             [notificationType.toLowerCase()]: notificationTypeId
-          }])
+          }).save()
+          await User.findOneAndUpdate({ _id: userId }, { $push: { notifications: newNotification.id } })
         }
-        newNotification = newNotification[0]
-        for (const follower of followerUsers) {
-          await User.updateMany({ _id: follower.follower }, {
-            $push: { notifications: newNotification.id }
-          })
-        }
-      } else {
+      }
+      if (notificationType === 'LIKE' || notificationType === 'FOLLOW' || notificationType === 'COMMENTLIKES') {
         newNotification = await new Notification({
           author: authorId,
           user: userId,
@@ -53,18 +85,18 @@ const resolvers = {
         }).save()
         await User.findOneAndUpdate({ _id: userId }, { $push: { notifications: newNotification.id } })
       }
-
-      newNotification = await newNotification.populate('author')
-      newNotification = await newNotification.populate('follow')
-      newNotification = await newNotification.populate({ path: 'comment', populate: { path: 'post' } })
-      newNotification = await newNotification.populate({ path: 'like', populate: { path: 'post' } })
-
-      pubSub.publish(NOTIFICATION_CREATED_OR_DELETED, {
-        notificationCreatedOrDeleted: {
-          operation: 'CREATE',
-          notification: newNotification
-        }
-      })
+      if (newNotification) {
+        newNotification = await newNotification.populate('author')
+        newNotification = await newNotification.populate('follow')
+        newNotification = await newNotification.populate({ path: 'comment', populate: { path: 'post' } })
+        newNotification = await newNotification.populate({ path: 'like', populate: { path: 'post' } })
+        pubSub.publish(NOTIFICATION_CREATED_OR_DELETED, {
+          notificationCreatedOrDeleted: {
+            operation: 'CREATE',
+            notification: newNotification
+          }
+        })
+      }
       return newNotification
     },
     deleteNotification: async (parent, { input: { id } }, context, info) => {
@@ -86,7 +118,6 @@ const resolvers = {
     updateNotificationSeen: async (parent, { input: { userId, notiId } }, context, info) => {
       try {
         const data = await Notification.findOneAndUpdate({ _id: notiId, user: userId, seen: false }, { seen: true })
-        // const data = await Notification.findOneAndUpdate({ user: userId, seen: false }, { seen: true }, { multi: true })
         return data
       } catch (e) {
         return false

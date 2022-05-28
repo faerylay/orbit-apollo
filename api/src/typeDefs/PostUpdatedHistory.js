@@ -5,7 +5,7 @@ export default gql`
     id:ID!
     title: String!
     description: String!
-    image:String
+    image:[String]
     post: ID
     user: ID
     createdAt: String
@@ -15,7 +15,7 @@ export default gql`
     id:ID!
     title: String!
     description: String!
-    image:String
+    image:[String]
     post: PostPayload
     user: UserPayload
     createdAt: String
@@ -24,7 +24,7 @@ export default gql`
   input CreateUpdatedHistoryInput{
     userId: ID!
     postId: ID!
-    image: String!
+    image: [String]
     title: String!
     description: String!
   }

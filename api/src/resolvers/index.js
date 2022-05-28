@@ -7,9 +7,9 @@ import likes from './likes'
 import follows from './follows'
 import notifications from './notifications'
 import userMention from './userMention'
-
+import message from './message'
 export default [
   users, posts, postUpdatedHistorys,
   comments, likes, follows, notifications,
-  commentlikes, userMention
+  commentlikes, userMention, message
 ]

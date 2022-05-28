@@ -7,7 +7,7 @@ const SearchResult = ({ data, loading }) => {
   const navigate = useNavigate()
   return (
     <Paper elevation={2} sx={searchBox}>
-      {data.length < 1 && (
+      {data?.length < 1 && (
         <Box>
           <Typography>No search results.</Typography>
         </Box>
@@ -32,16 +32,6 @@ const SearchResult = ({ data, loading }) => {
                 </Typography>
               </Box>
             </Box>
-            {
-              data?.title && (
-                <Box sx={{ ml: 5 }}>
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRByE_afvdE2jpnYSX2kJ1KesqFXDKGk0-KXZxJv4W5naEwuRgUgkomnXOMwELN0Ow1kaE&usqp=CAU" alt="..." width="100px" height="50px" />
-                  <Typography variant="subtitle1" >
-                    {data?.title}
-                  </Typography>
-                </Box>
-              )
-            }
           </Box>
         )
       })}

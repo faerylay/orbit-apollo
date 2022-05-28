@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import { UserInputError } from 'apollo-server-express'
 import { withFilter } from 'graphql-subscriptions'
 import { GraphQLUpload } from 'graphql-upload'
-import { Follow, Post, User } from '../models'
+import { Follow, Post, User, Message } from '../models'
 import { signUp, signIn } from '../validator'
 import * as Auth from '../auth'
 import pubSub from '../utils/Pubsub'
@@ -11,7 +11,7 @@ import { uploadToCloudinary } from '../utils/cloudinary'
 const resolvers = {
   Upload: GraphQLUpload,
   Query: {
-    me: async (root, args, { req }, info) => {
+    getAuthUser: async (root, args, { req }, info) => {
       const { userId } = req.session
       if (!mongoose.Types.ObjectId.isValid(userId)) {
         throw new UserInputError(`${userId} is not a valid user ID`)
@@ -40,6 +40,59 @@ const resolvers = {
         })
 
       user.newNotifications = user.notifications
+
+      // Find unseen messages
+      const lastUnseenMessages = await Message.aggregate([
+        {
+          $match: {
+            receiver: mongoose.Types.ObjectId(userId),
+            seen: false
+          }
+        },
+        {
+          $sort: { createdAt: -1 }
+        },
+        {
+          $group: {
+            _id: '$sender',
+            doc: {
+              $first: '$$ROOT'
+            }
+          }
+        },
+        { $replaceRoot: { newRoot: '$doc' } },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'sender',
+            foreignField: '_id',
+            as: 'sender'
+          }
+        }
+      ])
+
+      // Transform data
+      const newConversations = []
+      lastUnseenMessages.map(u => {
+        const user = {
+          id: u.sender[0]._id,
+          username: u.sender[0].username,
+          fullName: u.sender[0].fullName,
+          image: u.sender[0].image,
+          lastMessage: u.message,
+          lastMessageCreatedAt: u.createdAt
+        }
+
+        return newConversations.push(user)
+      })
+
+      // Sort users by last created messages date
+      const sortedConversations = newConversations.sort((a, b) =>
+        b.lastMessageCreatedAt.toString().localeCompare(a.lastMessageCreatedAt)
+      )
+
+      // Attach new conversations to auth User
+      user.newConversations = sortedConversations
       return user
     },
     getUser: async (root, { id: _id }, context, info) => {

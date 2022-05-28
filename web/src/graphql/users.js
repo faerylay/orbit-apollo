@@ -14,6 +14,7 @@ const userPayload = `
   coverImage
   coverImagePublicId
   createdAt
+  isOnline
 `;
 export const UPLOAD_PHOTO = gql`
   mutation uploadUserPhoto($input: UploadUserPhotoInput!) {
@@ -23,9 +24,9 @@ export const UPLOAD_PHOTO = gql`
   }
 `;
 
-export const ME = gql`
-  query Me {
-  me {
+export const GET_AUTH_USER = gql`
+  query getAuthUser {
+  getAuthUser {
     ${userPayload}
     following {
       id
@@ -33,6 +34,7 @@ export const ME = gql`
         id
         isOnline
         fullName
+        image
       }
       follower {
         id
@@ -61,6 +63,13 @@ export const ME = gql`
           id
         }
       }
+    }
+    newConversations {
+      id
+      fullName
+      image
+      lastMessage
+      lastMessageCreatedAt
     }
     likes {
       id

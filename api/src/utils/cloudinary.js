@@ -19,7 +19,7 @@ cloudinary.config({
  */
 export const uploadToCloudinary = async (stream, folder, imagePublicId) => {
   // if imagePublicId param is presented we should overwrite the image
-  const options = imagePublicId ? { public_id: imagePublicId, overwrite: true } : { public_id: `${folder}/${uuidv4()}` }
+  const options = imagePublicId ? { public_id: `${folder}/${uuidv4()}`, overwrite: true } : { public_id: `${folder}/${uuidv4()}` }
   return new Promise((resolve, reject) => {
     const streamLoad = cloudinary.v2.uploader.upload_stream(options, (error, result) => {
       if (result) {

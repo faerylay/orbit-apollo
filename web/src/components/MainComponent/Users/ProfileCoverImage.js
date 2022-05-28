@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client';
 import { IconSquarePlus } from '@tabler/icons';
 
 import { MAX_USER_COVER_IMAGE_SIZE } from '../../../constants'
-import { UPLOAD_PHOTO, ME, FETCH_USER, FETCH_ALL_USERS } from '../../../graphql'
+import { UPLOAD_PHOTO, GET_AUTH_USER, FETCH_USER, FETCH_ALL_USERS } from '../../../graphql'
 
 const ProfileCoverImage = ({ getUser }) => {
   const auth = useSelector(state => state?.users?.user);
@@ -37,7 +37,7 @@ const ProfileCoverImage = ({ getUser }) => {
           },
         },
         refetchQueries: () => [
-          { query: ME },
+          { query: GET_AUTH_USER },
           { query: FETCH_USER, variables: { getUserId: getUser.id } },
           { query: FETCH_ALL_USERS }
         ],

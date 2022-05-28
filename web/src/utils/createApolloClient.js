@@ -69,11 +69,6 @@ const createApolloClient = () => {
                 return incoming
               }
             },
-            // me: {
-            //   merge(existing, incoming) {
-            //     return incoming
-            //   }
-            // }
           }
         }
       }

@@ -1,16 +1,38 @@
 import React from 'react'
-import { List, Typography } from '@mui/material';
+import { List, Typography, useTheme } from '@mui/material';
 import NotificationList from './NotificationList';
 import { InfiniteScroll, Skeletons } from '../../../MainComponent';
-import { useStyles } from './styles';
 
 
 const Notifications = ({ variables, data, loading, fetchMore, networkStatus, setLimit }) => {
-  const classes = useStyles();
+  const theme = useTheme();
   if (loading && networkStatus === 1) return <Skeletons count={3} />
   if (!data?.getUserNotifications?.notifications?.length) return <Skeletons count={2} paddingTop={1} />
+
+
+  const listStyle = {
+    width: '100%',
+    maxWidth: 350,
+    minWidth: 300,
+    py: 0,
+    borderRadius: '10px',
+    backgroundColor: theme.palette.background.paper,
+    // [theme.breakpoints.down('md')]: {
+    //   minWidth: '100%',
+    //   maxWidth: 330,
+    // },
+    '& .MuiListItemSecondaryAction-root': {
+      top: 25
+    },
+    '& .MuiDivider-root': {
+      my: 0
+    },
+    '& .list-container': {
+      pl: 7
+    }
+  }
   return (
-    <List className={classes.root}>
+    <List sx={listStyle}>
       <InfiniteScroll
         data={data?.getUserNotifications?.notifications}
         dataKey="getUserNotifications.notifications"

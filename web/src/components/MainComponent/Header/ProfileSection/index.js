@@ -8,12 +8,15 @@ import { useSelector } from 'react-redux';
 import { useMutation } from '@apollo/client';
 
 import MainCard from '../../Helpers/cards/MainCard';
-import { Transitions } from '../../../MainComponent';
 import UpgradePlanCard from './UpgradePlanCard';
+
+import { Transitions } from '../../../MainComponent';
 import { LOG_OUT } from '../../../../graphql'
 import { isLoggedIn, forgetLogin } from '../../../../auth'
+import { useStyles } from './styles';
 
 const ProfileSection = () => {
+  const classes = useStyles()
   const theme = useTheme();
   const navigate = useNavigate();
   const customization = useSelector((state) => state.customization);
@@ -63,33 +66,11 @@ const ProfileSection = () => {
   return (
     <>
       <Chip
-        sx={{
-          height: '48px',
-          alignItems: 'center',
-          borderRadius: '27px',
-          transition: 'all .2s ease-in-out',
-          borderColor: theme.palette.primary.light,
-          backgroundColor: theme.palette.primary.light,
-          '&[aria-controls="menu-list-grow"], &:hover': {
-            borderColor: theme.palette.primary.main,
-            background: `${theme.palette.primary.main}!important`,
-            color: theme.palette.primary.light,
-            '& svg': {
-              stroke: theme.palette.primary.light
-            }
-          },
-          '& .MuiChip-label': {
-            lineHeight: 0
-          }
-        }}
+        className={classes.chipStyle}
         icon={
           <Avatar
             src={'https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg'}
-            sx={{
-              ...theme.typography.mediumAvatar,
-              margin: '8px 0 8px 8px !important',
-              cursor: 'pointer'
-            }}
+            className={classes.avatarStyle}
             ref={anchorRef}
             aria-controls={open ? 'menu-list-grow' : undefined}
             aria-haspopup="true"
@@ -201,22 +182,7 @@ const ProfileSection = () => {
                       </CardContent>
                     </Card>
                     <Divider />
-                    <List
-                      component="nav"
-                      sx={{
-                        width: '100%',
-                        maxWidth: 350,
-                        minWidth: 300,
-                        backgroundColor: theme.palette.background.paper,
-                        borderRadius: '10px',
-                        [theme.breakpoints.down('md')]: {
-                          minWidth: '100%'
-                        },
-                        '& .MuiListItemButton-root': {
-                          mt: 0.5
-                        }
-                      }}
-                    >
+                    <List component="nav" className={classes.list}    >
                       {
                         Boolean(isLoggedIn()) ? (
                           <>

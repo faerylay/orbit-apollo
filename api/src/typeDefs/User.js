@@ -47,6 +47,8 @@ export default gql`
     followingCount: Int!
     notifications: [NotificationPayload]
     newNotifications: [NotificationPayload]
+    newConversations: [ConversationsPayload]
+    unseenMessage: Boolean
     createdAt: String
     updatedAt: String
   }
@@ -74,10 +76,11 @@ export default gql`
     isCover: Boolean
   }
 
-  extend type Query {
-    me: UserPayload @auth
-    getUser(id: ID!): UserPayload @auth
-    getUsers: [UserPayload]! @auth
+
+  extend type Query{
+    getAuthUser: UserPayload @auth
+    getUser(id:ID!):UserPayload @auth
+    getUsers: [UserPayload]!  @auth
     searchUsers(searchQuery: String!): [UserPayload] @auth
     searchs(searchQuery: String!): [SearchResult!] @auth
     suggestPeople: [UserPayload] @auth
