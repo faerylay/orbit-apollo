@@ -7,7 +7,7 @@ import { makeStyles } from '@mui/styles';
 import { MAX_USER_PROFILE_IMAGE_SIZE } from '../../../../../constants';
 import {
   UPLOAD_PHOTO,
-  ME,
+  GET_AUTH_USER,
   FETCH_USER,
   FETCH_ALL_USERS,
 } from '../../../../../graphql';
@@ -44,8 +44,7 @@ const ProfileImage = ({ getUser }) => {
     if (file.size >= MAX_USER_PROFILE_IMAGE_SIZE) {
       setLoading(false);
       console.error(
-        `File size should be less then ${
-          MAX_USER_PROFILE_IMAGE_SIZE / 1000000
+        `File size should be less then ${MAX_USER_PROFILE_IMAGE_SIZE / 1000000
         }MB`
       );
       return;
@@ -63,7 +62,7 @@ const ProfileImage = ({ getUser }) => {
           },
         },
         refetchQueries: () => [
-          { query: ME },
+          { query: GET_AUTH_USER },
           { query: FETCH_USER, variables: { getUserId: getUser.id } },
           { query: FETCH_ALL_USERS },
         ],

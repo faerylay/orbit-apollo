@@ -38,14 +38,14 @@ export default function Profile() {
 
   if (loading || error || !getUser)
     return (
-      <Container maxWidth={'xs'} sx={{ padding: 0 }}>
+      <Container maxWidth={'sm'} sx={{ padding: 0 }}>
         <Skeletons count={3} cardContent cardActions />
       </Container>
     );
 
   if (!loading && getUser)
     return (
-      <Container maxWidth={'xs'} sx={{ padding: 0 }}>
+      <Container maxWidth={'sm'} sx={{ padding: 0 }}>
         <Paper sx={{ mb: 1 }}>
           <UserProfileInterface
             userId={userId}

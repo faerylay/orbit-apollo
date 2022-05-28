@@ -58,10 +58,10 @@ export default function Profile() {
       <Grid container>
         <Grid item xs={12}>
           <Grid container spacing={2}>
-            <Grid item sm={1} md={2} lg={3} />
-            <Grid item xs={12} sm={10} md={8} lg={6}>
+            <Grid item sm={1} md={2} lg={6} />
+            <Grid item xs={12} sm={10} md={8} lg={6} >
               <Grid container spacing={1}>
-                <Grid item xs={12} sm={6} md={6}>
+                <Grid item xs={12} sm={6} md={6} >
                   <Paper sx={{ height: 150, mb: 1 }}>
                     <ProfileCoverImage getUser={getUser} />
                   </Paper>

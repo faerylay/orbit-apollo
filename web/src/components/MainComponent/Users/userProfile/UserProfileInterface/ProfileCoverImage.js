@@ -7,7 +7,7 @@ import { IconSquarePlus } from '@tabler/icons';
 import { MAX_USER_COVER_IMAGE_SIZE } from '../../../../../constants';
 import {
   UPLOAD_PHOTO,
-  ME,
+  GET_AUTH_USER,
   FETCH_USER,
   FETCH_ALL_USERS,
 } from '../../../../../graphql';
@@ -47,7 +47,7 @@ const ProfileCoverImage = ({ getUser }) => {
           },
         },
         refetchQueries: () => [
-          { query: ME },
+          { query: GET_AUTH_USER },
           { query: FETCH_USER, variables: { getUserId: getUser.id } },
           { query: FETCH_ALL_USERS },
         ],

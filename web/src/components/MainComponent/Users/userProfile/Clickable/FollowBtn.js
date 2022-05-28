@@ -9,7 +9,7 @@ import {
   CREATE_FOLLOW,
   FETCH_USER,
   FETCH_ALL_USERS,
-  ME,
+  GET_AUTH_USER,
   GET_FOLLOWED_POSTS,
   USER_SUGGESTION,
 } from '../../../../../graphql';
@@ -32,7 +32,7 @@ export default function FollowBtn({ getUser }) {
       },
     },
     refetchQueries: [
-      { query: ME },
+      { query: GET_AUTH_USER },
       { query: FETCH_ALL_USERS },
       { query: USER_SUGGESTION },
       { query: FETCH_USER, variables: { getUserId: getUser?.id } },
