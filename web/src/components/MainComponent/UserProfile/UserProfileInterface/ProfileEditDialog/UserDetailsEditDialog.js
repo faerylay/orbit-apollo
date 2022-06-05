@@ -1,18 +1,5 @@
 import React from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogActions,
-  DialogTitle,
-  Button,
-  Box,
-  TextField,
-  FormControl,
-  FormLabel,
-  FormControlLabel,
-  RadioGroup,
-  Radio,
-} from '@mui/material';
+import { Dialog, DialogContent, DialogActions, DialogTitle, Button, Box, TextField, FormControl, FormLabel, FormControlLabel, RadioGroup, Radio, } from '@mui/material';
 
 const UserDetailsEditDialog = ({ open, handleClose }) => {
   return (

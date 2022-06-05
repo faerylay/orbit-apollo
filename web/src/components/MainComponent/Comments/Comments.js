@@ -13,7 +13,7 @@ export default function Comments({ getPost }) {
   const navigate = useNavigate()
   const user = useSelector(state => state?.users?.user)
   return (
-    <Box sx={{ py: 2 }}>
+    <Box>
       {getPost?.comments?.map(comment => (
         <Box key={comment?.id} sx={{ border: 1, borderColor: '#ddd', borderRadius: 2, mb: .5, p: .5 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', pl: 1, pt: 1 }}>

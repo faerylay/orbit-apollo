@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IconButton, Menu, MenuItem, Box, Typography } from '@mui/material';
-import { MoreVert } from '@mui/icons-material';
+import { IconDots } from '@tabler/icons'
 import { useMutation, useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux'
 import { FETCH_POSTS_QUERY, DELETE_POST, POST_UPDATED_HISTORIES } from '../../../graphql'
@@ -38,7 +38,7 @@ export default function PostMenu({ postId, userId, imagePublicId }) {
       {(popupState) => (
         <>
           <IconButton {...bindTrigger(popupState)} >
-            <MoreVert />
+            <IconDots />
           </IconButton>
           <Menu {...bindMenu(popupState)}>
             {
@@ -65,6 +65,9 @@ export default function PostMenu({ postId, userId, imagePublicId }) {
             </MenuItem>
             <MenuItem >
               <Typography>Report Post</Typography>
+            </MenuItem>
+            <MenuItem onClick={() => navigate(`/single-post/${postId}`)}>
+              <Typography>Post Detail</Typography>
             </MenuItem>
 
           </Menu>

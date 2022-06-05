@@ -2,22 +2,12 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useMutation } from '@apollo/client';
 import { IconUserPlus, IconUsers } from '@tabler/icons';
-import { useTheme } from '@emotion/react';
-import { Box, IconButton, Typography } from '@mui/material';
+import { Box, IconButton, Typography, useTheme } from '@mui/material';
 
-import {
-  CREATE_FOLLOW,
-  FETCH_USER,
-  FETCH_ALL_USERS,
-  GET_AUTH_USER,
-  GET_FOLLOWED_POSTS,
-  USER_SUGGESTION,
-} from '../../../../../graphql';
-import {
-  NotificationType,
-  HOME_PAGE_POSTS_LIMIT,
-} from '../../../../../constants';
+import { CREATE_FOLLOW, FETCH_USER, FETCH_ALL_USERS, GET_AUTH_USER, GET_FOLLOWED_POSTS, USER_SUGGESTION } from '../../../../../graphql';
+import { NotificationType, HOME_PAGE_POSTS_LIMIT } from '../../../../../constants';
 import useNotifications from '../../../../../hooks/useNotifications';
+
 
 export default function FollowBtn({ getUser }) {
   const [loading, setLoading] = useState(false);
@@ -86,8 +76,8 @@ export default function FollowBtn({ getUser }) {
             background: theme.palette.primary.dark,
             color: theme.palette.primary.light,
           },
-          width: '100%',
-          height: 36,
+          width: '90%',
+          height: 32,
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center' }}>

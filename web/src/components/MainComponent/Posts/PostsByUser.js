@@ -5,7 +5,7 @@ import { GET_USER_POSTS } from '../../../graphql'
 import { PROFILE_PAGE_POSTS_LIMIT } from '../../../constants/DataLimit'
 
 import { InfiniteScroll, EmptyPost, Skeletons } from '../../MainComponent'
-import PostCard from './PostCard';
+import { PostCard } from './index';
 
 
 const PostsByUser = ({ getUser }) => {
@@ -19,7 +19,7 @@ const PostsByUser = ({ getUser }) => {
   })
   const post = data?.getUserPosts;
 
-  if (loading && networkStatus === 1) return <Skeletons count={2} cardContent cardActions />
+  if (loading && networkStatus === 1) return <Skeletons count={2} cardHeader cardContent cardActions />
   if (!post?.posts?.length) return <EmptyPost />
 
   return (
@@ -36,7 +36,7 @@ const PostsByUser = ({ getUser }) => {
         return (
           <Box>
             <PostCard data={data} />
-            {showNextLoading && <Skeletons count={2} cardContent cardActions />}
+            {showNextLoading && <Skeletons count={2} cardHeader cardContent cardActions />}
           </Box>
         )
       }}

@@ -44,14 +44,14 @@ export default function Profile() {
           <Grid container spacing={2}>
             <Grid item sm={1} md={2} lg={3} />
             <Grid item xs={12} sm={10} md={8} lg={6}>
-              <Skeletons count={3} cardContent cardActions />
+              <Skeletons count={3} cardHeader cardContent cardActions />
             </Grid>
           </Grid>
         </Grid>
       </Grid>
     );
-  if (error) return <Skeletons count={3} cardContent cardActions />;
-  if (!getUser) return <Skeletons count={3} cardContent cardActions />;
+  if (error) return <Skeletons count={3} cardHeader cardContent cardActions />;
+  if (!getUser) return <Skeletons count={3} cardHeader cardContent cardActions />;
 
   if (!loading && getUser)
     return (

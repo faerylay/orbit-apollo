@@ -1,7 +1,5 @@
 import React from 'react';
-
-import FollowerFollowingBtn from '../Clickable/FollowerFollowingBtn';
-import FollowerFollowingDialog from './FollowerFollowingDialog';
+import { FollowerFollowingBtn, FollowerFollowingDialog } from './index';
 
 const Following = ({ getUser }) => {
   const [open, setOpen] = React.useState(false);
@@ -14,16 +12,6 @@ const Following = ({ getUser }) => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  // const descriptionElementRef = React.useRef(null);
-  // React.useEffect(() => {
-  //   if (open) {
-  //     const { current: descriptionElement } = descriptionElementRef;
-  //     if (descriptionElement !== null) {
-  //       descriptionElement.focus();
-  //     }
-  //   }
-  // }, [open]);
 
   return (
     <>

@@ -11,6 +11,7 @@ import InfiniteScroll from './Helpers/InfiniteScroll'
 import NotFound from './Helpers/NotFound'
 import Skeletons from './Helpers/Skeletons'
 import NotSelected from './Helpers/NotSelected'
+import MakeDialogOpen from './Helpers/MakeDialogOpen'
 export {
   NotFound,
   AnimateButton,
@@ -24,5 +25,6 @@ export {
   LogoSection,
   EmptyPost,
   InfiniteScroll,
-  NotSelected
+  NotSelected,
+  MakeDialogOpen
 }

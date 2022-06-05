@@ -9,8 +9,8 @@ export const editorStyle = {
   cursor: 'text',
   borderRadius: 2,
   background: '#fefefe',
-  minHeight: 10,
-  padding: 2
+  padding: 1,
+  marginBottom: 2,
 }
 export const HeaderAvatarStyle = styled(Avatar, { shouldForwardProp })(({ theme }) => ({
   ...theme.typography.commonAvatar,

@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client'
 import { Typography, Box, Card, Paper, CardContent } from '@mui/material'
 
 import { USER_SUGGESTION, } from '../../../graphql'
-import { CreateFollow } from '../Users'
+import { CreateFollow } from '../UserProfile/UserProfileInterface/index'
 
 const SuggestionPeople = () => {
   const { data: { suggestPeople } = {}, loading } = useQuery(USER_SUGGESTION)

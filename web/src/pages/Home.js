@@ -15,7 +15,7 @@ const Home = () => {
           <Grid item xs={12} md={5} lg={4}>
             <SuggestionPeople />
             <NotFound />
-            <Skeletons count={2} cardContent cardActions />
+            <Skeletons count={2} cardHeader cardContent cardActions />
           </Grid>
         </Grid>
       </Grid>

@@ -5,7 +5,6 @@ export const useStyles = makeStyles((theme) => createStyles({
     ...theme.typography.commonAvatar,
     ...theme.typography.smallAvatar,
     transition: 'all .2s ease-in-out',
-    background: theme.palette.secondary.light,
     color: theme.palette.secondary.dark,
     '&[aria-controls="menu-list-grow"],&:hover': {
       background: theme.palette.secondary.dark,

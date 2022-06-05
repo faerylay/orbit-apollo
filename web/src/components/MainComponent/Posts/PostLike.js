@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
-import { IconButton } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { IconThumbUp } from '@tabler/icons';
 import { useMutation } from '@apollo/client'
 import useNotifications from '../../../hooks/useNotifications'
@@ -9,7 +9,7 @@ import { NotificationType } from '../../../constants/NotificationType';
 import { LIKE_POST, FETCH_POSTS_QUERY, FETCH_POST, GET_AUTH_USER, FETCH_USER, FETCH_ALL_USERS, GET_FOLLOWED_POSTS, GET_USER_POSTS } from '../../../graphql'
 import { PROFILE_PAGE_POSTS_LIMIT, HOME_PAGE_POSTS_LIMIT } from '../../../constants/DataLimit'
 
-export default function LikePost({ postId, author, likes }) {
+export default function LikePost({ postId, author, likes, likeCount }) {
   const theme = useTheme();
   const [loading, setLoading] = useState(false)
   const auth = useSelector(state => state?.users.user)
@@ -58,8 +58,11 @@ export default function LikePost({ postId, author, likes }) {
   }
 
   return (
-    <IconButton sx={{ color: authLiked ? theme.palette.primary.main : theme.palette.grey[500] }} disabled={loading} aria-label="add to favorites" onClick={handleButtonClick} >
+    <Button sx={{ color: authLiked ? theme.palette.primary.main : theme.palette.grey[500] }} disabled={loading} aria-label="add to favorites" onClick={handleButtonClick} >
       <IconThumbUp />
-    </IconButton>
+      {
+        likeCount && <Typography sx={{ paddingLeft: 1 }}>Likes {likeCount}</Typography>
+      }
+    </Button>
   )
 }

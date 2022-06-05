@@ -15,15 +15,9 @@ import {
   Divider,
 } from '@mui/material';
 
-import { ListItemWrapper } from '../styles';
+import { ListItemWrapper } from '../../styles';
 
-const FollowerFollowingDialog = ({
-  list,
-  title,
-  open,
-  handleClose,
-  scroll,
-}) => {
+const FollowerFollowingDialog = ({ list, title, open, handleClose, scroll }) => {
   const navigate = useNavigate();
 
   return (

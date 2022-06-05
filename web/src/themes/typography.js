@@ -83,7 +83,7 @@ export default function themeTypography(theme) {
       }
     },
     mainContent: {
-      backgroundColor: theme.divider,
+      backgroundColor: theme.littleDivider,
       width: '100%',
       minHeight: 'calc(100vh - 88px)',
       flexGrow: 1,

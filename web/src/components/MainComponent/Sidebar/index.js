@@ -27,8 +27,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
           }}
         >
           <UserFollowed />
-          {/* <UserFollowed followed={user?.following} /> */}
-          {/* <UsersList /> */}
+          <UsersList />
         </Box>
       </BrowserView>
       <MobileView>

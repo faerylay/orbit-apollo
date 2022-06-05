@@ -18,6 +18,7 @@ import { editorContent, mentionList, handlePostImageUpload, editorStyle } from '
 const CommentCreate = ({ postId, author }) => {
   const ref = useRef(null);
   const focusEditor = () => ref.current.focus();
+  const [loading, setLoading] = useState(false)
   const client = useApolloClient()
   const notification = useNotifications()
   const auth = useSelector(state => state?.users?.user)
@@ -31,7 +32,7 @@ const CommentCreate = ({ postId, author }) => {
   const commentText = editorContent(rawEditorContent)
   const mentions = mentionList(rawEditorContent)
 
-  const [createComment, { loading, error }] = useMutation(CREATE_COMMENT, {
+  const [createComment, { error }] = useMutation(CREATE_COMMENT, {
     variables: {
       input: {
         postId,
@@ -72,6 +73,7 @@ const CommentCreate = ({ postId, author }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
     const { data } = await createComment()
     const mention = mentions?.map(item => item?.userId)
     if (mention.length || auth?.id !== author?.id) {
@@ -85,12 +87,22 @@ const CommentCreate = ({ postId, author }) => {
     }
     setEditorState(EditorState.createEmpty())
     setImage('')
+    setLoading(false)
   }
   if (error) return <Typography>Something wrong creating comment</Typography>
   return (
     <form onSubmit={handleSubmit}>
-      <Grid container spacing={2} justify='center'>
-        <Grid item xs={12}>
+      <Grid container justify='center' alignItems='flex-end' >
+        {
+          image && (
+            <Grid item xs={12} sx={{ padding: 1 }}>
+              <Box sx={{ width: '100%', height: 40, display: 'flex' }}>
+                <img key={image.name} src={URL.createObjectURL(image)} alt="..." style={{ marginRight: 5, borderRadius: 5 }} />
+              </Box>
+            </Grid>
+          )
+        }
+        <Grid item xs={7} sm={6} md={8} lg={8} >
           <Box sx={editorStyle} onClick={() => focusEditor()}   >
             <Editor
               editorKey={'editor'}
@@ -107,9 +119,9 @@ const CommentCreate = ({ postId, author }) => {
             />
           </Box>
         </Grid>
-        <Grid item xs={12}>
-          <Box sx={{ display: 'flex' }}>
-            <label htmlFor="commentImage">
+        <Grid item xs={5} sm={6} md={4} lg={4} sx={{ marginBottom: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <label htmlFor="commentImage" style={{ paddingInline: 5 }}>
               <input
                 style={{ display: "none" }}
                 id="commentImage"
@@ -124,26 +136,18 @@ const CommentCreate = ({ postId, author }) => {
                 component="span"
                 aria-label="add"
                 variant="extended"
-                sx={{ width: 60, height: 50, boxShadow: 'none', zIndex: 1 }}
+                sx={{ boxShadow: 'none', zIndex: 1, borderRadius: 1.5, width: 50 }}
                 disableRipple={true}
                 disableFocusRipple={true}
               >
                 <IconSquarePlus />
               </Fab>
             </label>
-            {
-              image && (
-                <Box sx={{ width: '100%', height: 40, display: 'flex', ml: 5, mt: 1 }}>
-                  <img key={image.name} src={URL.createObjectURL(image)} alt="..." style={{ marginRight: 5, borderRadius: 5 }} />
-                </Box>
-              )
-            }
+
+            <Button type='submit' variant='contained' color='primary' disabled={loading}>
+              <Typography variant='subtitle2' color='white'>Comment</Typography>
+            </Button>
           </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <Button type='submit' variant='contained' color='primary' size='large' disabled={loading}>
-            Create Comment
-          </Button>
         </Grid>
       </Grid>
     </form>

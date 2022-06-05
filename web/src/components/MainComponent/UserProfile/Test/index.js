@@ -1,10 +1,10 @@
-import CreateFollow from "./CreateFollow";
+// import CreateFollow from "./CreateFollow";
 import Following from "./Following";
 import Followers from "./Followers";
 import ProfileImage from "./ProfileImage";
 import ProfileCoverImage from "./ProfileCoverImage";
 export {
-  CreateFollow,
+  // CreateFollow,
   Following,
   Followers,
   ProfileImage,

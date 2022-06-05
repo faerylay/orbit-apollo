@@ -5,8 +5,8 @@ import PostUpdating from "./PostUpdating";
 import PostWhoLike from "./PostWhoLike";
 import CardMedias from "./CardMedias";
 import PostsByUser from "./PostsByUser";
-import PostCard from "./PostCard";
-
+import PostDialog from "./PostDialog";
+import PostCard from './PostCard'
 export {
   PostLike,
   PostsFollowedUser,
@@ -15,5 +15,6 @@ export {
   PostWhoLike,
   PostsByUser,
   PostCard,
-  CardMedias
+  CardMedias,
+  PostDialog
 }

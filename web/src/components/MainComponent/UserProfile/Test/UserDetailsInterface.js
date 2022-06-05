@@ -1,15 +1,19 @@
 import React from 'react';
 import { Typography, Box, Fab } from '@mui/material';
-import PhotoLibraryRoundedIcon from '@mui/icons-material/PhotoLibraryRounded';
-import VideoLibraryRoundedIcon from '@mui/icons-material/VideoLibraryRounded';
+import { IconPhoto } from '@tabler/icons'
+import { useStyles } from '../styles'
+
 
 const UserDetailsInterface = () => {
+  const classes = useStyles()
   return (
-    <>
-      <Typography variant='body1' align='center' sx={{ p: 1, my: 2 }}>
-        Bio text
-      </Typography>
-
+    <Box sx={{ paddingBlock: 2, paddingInline: 1 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
+        <Typography variant='h5' sx={{ mr: 2 }}>
+          Sex -{' '}
+        </Typography>
+        <Typography variant='body1'>Male</Typography>
+      </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
         <Typography variant='h5' sx={{ mr: 2 }}>
           From -{' '}
@@ -25,23 +29,15 @@ const UserDetailsInterface = () => {
 
       <Box sx={{ px: 2, py: 2.5 }}>
         <Fab
-          sx={{ mr: 1, boxShadow: 'none' }}
+          className={classes.photos}
           size='small'
           variant='extended'
           aria-label='photo gallery'
         >
-          <PhotoLibraryRoundedIcon sx={{ mr: 1 }} /> Photos
-        </Fab>
-        <Fab
-          sx={{ boxShadow: 'none' }}
-          size='small'
-          variant='extended'
-          aria-label='video gallery'
-        >
-          <VideoLibraryRoundedIcon sx={{ mr: 1 }} /> Videos
+          <IconPhoto /> &nbsp; Photos
         </Fab>
       </Box>
-    </>
+    </Box>
   );
 };
 

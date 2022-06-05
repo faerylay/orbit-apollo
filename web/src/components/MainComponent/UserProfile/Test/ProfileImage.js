@@ -7,8 +7,8 @@ import { Box, Fab, Avatar, Typography } from '@mui/material';
 
 
 
-import { MAX_USER_PROFILE_IMAGE_SIZE } from '../../../constants'
-import { UPLOAD_PHOTO, GET_AUTH_USER, FETCH_USER, FETCH_ALL_USERS } from '../../../graphql'
+import { MAX_USER_PROFILE_IMAGE_SIZE } from '../../../../constants'
+import { UPLOAD_PHOTO, GET_AUTH_USER, FETCH_USER, FETCH_ALL_USERS } from '../../../../graphql'
 
 
 const ProfileImage = ({ getUser, isUserOnline, userId }) => {

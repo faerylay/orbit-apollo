@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client'
 import { GET_FOLLOWED_POSTS } from '../../../graphql'
 import { Skeletons, EmptyPost, InfiniteScroll } from '../../MainComponent'
 
-import PostCard from './PostCard'
+import { PostCard } from './index'
 import { useSelector } from 'react-redux';
 import { HOME_PAGE_POSTS_LIMIT } from '../../../constants/DataLimit'
 
@@ -22,7 +22,7 @@ export default function PostsFollowedUser() {
   const renderContent = () => {
     if (loading && networkStatus === 1) return (
       <>
-        <Skeletons count={3} cardContent cardActions />
+        <Skeletons count={3} cardHeader cardContent cardActions />
       </>
     )
     if (!post?.posts?.length) return <EmptyPost />
@@ -40,7 +40,7 @@ export default function PostsFollowedUser() {
           return (
             <Box>
               <PostCard data={data} />
-              {showNextLoading && <Skeletons count={2} cardContent cardActions />}
+              {showNextLoading && <Skeletons count={2} cardHeader cardContent cardActions />}
             </Box>
           )
         }}

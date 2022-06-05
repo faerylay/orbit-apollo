@@ -41,7 +41,7 @@ export default function SinglePost() {
                     <Typography variant="h6" color="black">{getPost?.title}</Typography>
                     <Typography variant="body2" color="text.secondary"> {getPost?.description}</Typography>
                   </CardContent>
-                  <CardActions disableSpacing sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <CardActions disableSpacing sx={{ display: 'flex', justifyContent: 'space-between', paddingBlock: 0 }}>
                     <Box sx={{ display: 'flex', textAlign: 'center', alignItems: 'center' }}>
                       <PostLike postId={getPost?.id} author={getPost?.author} likes={getPost?.likes} />
                       <Typography>{getPost?.likeCount} .Like</Typography>
@@ -52,7 +52,7 @@ export default function SinglePost() {
                       <Typography >{getPost?.commentCount} .Comment</Typography>
                     </Box>
                   </CardActions>
-                  <CardContent>
+                  <CardContent >
                     <CommentCreate postId={getPost?.id} author={getPost?.author} />
                     <Comments getPost={getPost} />
                   </CardContent>

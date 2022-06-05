@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Avatar, Typography, ButtonBase } from '@mui/material';
+import { Box, Avatar, Typography, ButtonBase, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom'
 import { useSubscription } from '@apollo/client'
 import { IconBrandMessenger, IconUser } from '@tabler/icons'
@@ -9,16 +9,17 @@ import { useStyles } from './styles';
 
 const UserOnline = ({ following, authUserId }) => {
   const navigate = useNavigate()
+  const theme = useTheme()
+
   const { data, loading } = useSubscription(IS_USER_ONLINE, {
     variables: { authUserId, userId: following?.author?.id },
     skip: !following?.author?.isOnline
   });
-
   let isUserOnline = following?.author.isOnline
   if (!loading && data) {
     isUserOnline = data?.isUserOnline?.isOnline;
   }
-  const classes = useStyles(isUserOnline)
+  const classes = useStyles({ isUserOnline })
 
   const goTo = goto => navigate(`/${goto}/${following.author.id}`)
   return (
@@ -33,6 +34,7 @@ const UserOnline = ({ following, authUserId }) => {
           <Box sx={{ display: 'flex' }}>
             <ButtonBase onClick={() => goTo('profile')} className={classes.btnBase}>
               <Avatar
+                sx={{ background: theme.palette.primary.light }}
                 variant="rounded"
                 className={classes.buttonBaseStyle}
                 color="inherit"
@@ -42,6 +44,7 @@ const UserOnline = ({ following, authUserId }) => {
             </ButtonBase>
             <ButtonBase onClick={() => goTo('chat')} className={classes.btnBase}>
               <Avatar
+                sx={{ background: theme.palette.secondary.light }}
                 variant="rounded"
                 className={classes.buttonBaseStyle}
                 color="inherit"

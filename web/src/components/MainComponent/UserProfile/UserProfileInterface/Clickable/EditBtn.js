@@ -1,9 +1,8 @@
 import React from 'react';
 import { IconButton, Menu, MenuItem } from '@mui/material';
+import { IconDotsVertical, IconX } from '@tabler/icons';
 
-import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
-
-export default function EditBtn() {
+export default function EditBtn({ close }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = event => {
@@ -13,10 +12,14 @@ export default function EditBtn() {
     setAnchorEl(null);
   };
 
+
   return (
     <div>
-      <IconButton size='small' onClick={handleClick}>
-        <MoreVertRoundedIcon fontSize='small' />
+      <IconButton size='small' onClick={close} style={{ position: 'absolute', top: 0, left: 0 }}>
+        <IconX fontSize='small' color="white" />
+      </IconButton>
+      <IconButton size='small' onClick={handleClick} style={{ position: 'absolute', top: 0, right: 0 }}>
+        <IconDotsVertical fontSize='small' color="white" />
       </IconButton>
       <Menu
         anchorEl={anchorEl}
@@ -31,7 +34,6 @@ export default function EditBtn() {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Upload Photo</MenuItem>
         <MenuItem onClick={handleClose}>Save Photo</MenuItem>
       </Menu>
     </div>

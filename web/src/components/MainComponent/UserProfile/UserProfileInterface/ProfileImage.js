@@ -1,30 +1,14 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useApolloClient } from '@apollo/client';
-import { Avatar } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Avatar, Box, Fab } from '@mui/material';
+import { IconCameraSelfie } from '@tabler/icons';
 
-import { MAX_USER_PROFILE_IMAGE_SIZE } from '../../../../../constants';
-import {
-  UPLOAD_PHOTO,
-  GET_AUTH_USER,
-  FETCH_USER,
-  FETCH_ALL_USERS,
-} from '../../../../../graphql';
+import { MAX_USER_PROFILE_IMAGE_SIZE } from '../../../../constants';
+import { UPLOAD_PHOTO, GET_AUTH_USER, FETCH_USER, FETCH_ALL_USERS, } from '../../../../graphql';
 
-import ProfileEditDialog from '../EditDialog/ProfileEditDialog';
-
-const useStyles = makeStyles(() => ({
-  root: { width: '100%', position: 'relative', cursor: 'pointer' },
-  wrapper: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    '& > *': { height: '100%', width: '100%' },
-  },
-}));
+import { ProfileEditDialog } from './index';
+import { useStyles } from '../styles';
 
 const ProfileImage = ({ getUser }) => {
   const classes = useStyles();
@@ -79,12 +63,7 @@ const ProfileImage = ({ getUser }) => {
         src={getUser?.image}
         alt='profile'
         accept='image/x-png,image/jpeg'
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          objectPosition: 'center',
-        }}
+        className={classes.profileImage}
       />
     ) : (
       <Avatar />
@@ -93,19 +72,45 @@ const ProfileImage = ({ getUser }) => {
 
   return (
     <>
-      <div onClick={() => setIsDialogOpen(true)} className={classes.root}>
-        <div className={classes.wrapper}>
+      <div className={classes.profileRoot}>
+        <div onClick={() => setIsDialogOpen(true)} className={classes.profileRootWrapper}>
           {loading && <Avatar />}
           {!loading && renderProfileImage()}
         </div>
+
         <div style={{ paddingBottom: (1 / 1) * 100 + '%' }} />
       </div>
+      <Box className={classes.profileImageinputLabel} >
+        {auth?.id === getUser?.id && (
+          <label htmlFor='profileImage' >
+            <input
+              style={{ display: "none" }}
+              id="profileImage"
+              name="profileImage"
+              type="file"
+              accept="image/x-png,image/jpeg"
+              onChange={handleImageChange}
+            />
+            <Fab
+              color='inherit'
+              size='small'
+              className={classes.profileImageFab}
+              disableRipple={false}
+              disableFocusRipple={false}
+              component='p'
+              aria-label='add'
+              variant='string'
+            >
+              <IconCameraSelfie />
+            </Fab>
+          </label>
+        )}
+      </Box>
       <ProfileEditDialog
-        title='Profile Photo'
         isOpen={isDialogOpen}
         close={() => setIsDialogOpen(false)}
       >
-        <div style={{ maxWidth: '260px', maxHeight: '260px' }}>
+        <div >
           {!loading && renderProfileImage()}
         </div>
       </ProfileEditDialog>

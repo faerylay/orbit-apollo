@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography, IconButton, Box } from '@mui/material';
 import { IconChevronDown } from '@tabler/icons';
 
-import { useStyles } from '../styles';
+import { useStyles } from '../../styles';
 
 const FollowerFollowingBtn = ({ value, title, handleClickOpen }) => {
   const classes = useStyles();
@@ -11,20 +11,13 @@ const FollowerFollowingBtn = ({ value, title, handleClickOpen }) => {
     <IconButton
       color='inherit'
       className={classes.root}
-      size='small'
-      sx={{ py: 0.2, mr: 0.7 }}
+      sx={{ py: 0.5, mr: 0.7, px: 1.5 }}
       disableRipple
       onClick={handleClickOpen('paper')}
     >
-      <Typography sx={{ fontSize: { xs: 16, sm: 20 } }}>{value}</Typography>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Typography sx={{ fontSize: { xs: 10, sm: 14 }, mr: 0.2, ml: 0.5 }}>
+      <Typography className={classes.followCount}>{value}</Typography>
+      <Box className={classes.followTitle} >
+        <Typography sx={{ fontSize: { xs: 11, sm: 13 }, mx: .5 }}>
           {title}
         </Typography>
         <IconChevronDown size={16} />

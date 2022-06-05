@@ -1,7 +1,6 @@
 import React from 'react';
 
-import FollowerFollowingBtn from '../Clickable/FollowerFollowingBtn';
-import FollowerFollowingDialog from './FollowerFollowingDialog';
+import { FollowerFollowingBtn, FollowerFollowingDialog } from './index';
 
 const Followers = ({ getUser }) => {
   const [open, setOpen] = React.useState(false);
