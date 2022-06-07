@@ -61,7 +61,7 @@ export default function LikePost({ postId, author, likes, likeCount }) {
     <Button sx={{ color: authLiked ? theme.palette.primary.main : theme.palette.grey[500] }} disabled={loading} aria-label="add to favorites" onClick={handleButtonClick} >
       <IconThumbUp />
       {
-        likeCount && <Typography sx={{ paddingLeft: 1 }}>Likes {likeCount}</Typography>
+        likeCount ? <Typography sx={{ paddingLeft: 1 }}>Likes {likeCount}</Typography> : null
       }
     </Button>
   )

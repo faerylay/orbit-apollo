@@ -30,11 +30,7 @@ const UserProfileInterface = ({ auth, getUser, userId, isUserOnline }) => {
                   justifyContent: { xs: 'center', sm: 'left' }
                 }}
               >
-                <Typography
-                  variant='h3'
-                  sx={{ fontSize: { xs: '1.5rem', sm: '1.5rem' } }}
-                  marginRight={1}
-                >
+                <Typography variant='h3' sx={{ fontSize: '1.5rem' }}  >
                   {getUser?.fullName}
                 </Typography>
               </Box>

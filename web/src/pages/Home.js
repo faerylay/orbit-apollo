@@ -12,7 +12,7 @@ const Home = () => {
           <Grid item xs={12} md={7} lg={6} >
             <PostsFollowedUser />
           </Grid>
-          <Grid item xs={12} md={5} lg={4}>
+          <Grid item xs={12} md={5} lg={4} display={{ xs: "none", lg: "block" }}>
             <SuggestionPeople />
             <NotFound />
             <Skeletons count={2} cardHeader cardContent cardActions />

@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Tabs, Tab, } from '@mui/material';
 import PhotosList from './PhotosList';
 import { PostsByUser } from '../../Posts';
-function TabPanel(props) {
+const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
 
   return (
@@ -32,8 +32,10 @@ export default function TabComponent({ getUser }) {
           <Tab label="Photos" {...a11yProps(1)} />
         </Tabs>
       </Box>
-      <TabPanel value={value} index={0}>
-        <PostsByUser getUser={getUser} />
+      <TabPanel value={value} index={0} >
+        <Box sx={{ mt: 1 }}>
+          <PostsByUser getUser={getUser} />
+        </Box>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <PhotosList getUser={getUser} />

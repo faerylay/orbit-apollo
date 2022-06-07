@@ -2,11 +2,12 @@ import React from 'react';
 import Carousel from 'react-material-ui-carousel'
 import { Box, Avatar, Typography, IconButton, Divider, useTheme, useMediaQuery } from '@mui/material';
 import { useQuery } from '@apollo/client';
-import { IconDotsVertical, IconBookmarks } from '@tabler/icons'
+import { IconBookmarks } from '@tabler/icons'
 import { useStyles } from './styles';
 import { FETCH_POST } from '../../../graphql';
 import { CommentCreate, Comments } from '../Comments';
-import { PostLike } from '.';
+import { PostLike, PostWhoLike, PostMenu } from '.';
+
 
 
 const PostDialog = ({ postId }) => {
@@ -23,7 +24,7 @@ const PostDialog = ({ postId }) => {
       <Carousel
         navButtonsAlwaysVisible={getPost.image.length > 1}
         navButtonsAlwaysInvisible={getPost.image.length === 1}
-        indicators={false} swipe={false} Slide autoPlay={false}
+        indicators={false} swipe={false} slide={true} autoPlay={false}
         height={heightCarousel}
       >
         {getPost.image.map(image => (
@@ -53,9 +54,7 @@ const PostDialog = ({ postId }) => {
             <Typography variant='h3' component='p'>{getPost?.author?.fullName}</Typography>
           </Box>
           <Box className={classes.postDialogHeaderMenu}>
-            <IconButton>
-              <IconDotsVertical />
-            </IconButton>
+            <PostMenu postId={getPost?.id} userId={getPost?.author?.id} imagePublicId={getPost?.imagePublicId} />
           </Box>
         </Box>
         <Divider />
@@ -68,8 +67,12 @@ const PostDialog = ({ postId }) => {
           <Box sx={{ height: 30, width: '100%', display: 'flex', justifyContent: 'space-around' }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <PostLike postId={getPost?.id} author={getPost?.author} likes={getPost?.likes} likeCount={getPost?.likeCount} />
+              {
+                Boolean(getPost?.likes.length) && <PostWhoLike liked={getPost?.likes} />
+              }
+
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box className={classes.displayFlex} >
               <Typography>{getPost?.commentCount}</Typography>
               <Typography sx={{ paddingLeft: 1 }}>Comments</Typography>
             </Box>

@@ -4,6 +4,39 @@ import { styled } from '@mui/material/styles';
 import { shouldForwardProp } from '@mui/system';
 
 export const useStyles = makeStyles((theme) => createStyles({
+  displayFlex: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  postCardMain: {
+    width: '100%',
+    padding: 12,
+    background: '#fff',
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingInline: 16
+  },
+  postCardHeader: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  postCardImage: {
+    width: 'auto',
+    minWidth: 'auto',
+    maxWidth: '100%',
+    minHeight: 300,
+    maxHeight: 700,
+    margin: 'auto',
+  },
+  postImageExist: {
+    cursor: 'pointer',
+    color: '#000',
+    "&:hover": {
+      color: 'dodgerblue'
+    }
+  },
   dialogBox: {
     width: '100%',
     height: 'calc(100vh - calc(100vh /12))',

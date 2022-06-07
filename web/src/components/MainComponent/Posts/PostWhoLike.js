@@ -21,6 +21,8 @@ export default function PostWhoLike({ liked }) {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        disableFocusRipple
+        disableTouchRipple
       >
         <KeyboardArrowDownOutlined></KeyboardArrowDownOutlined>
       </IconButton>

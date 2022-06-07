@@ -2,13 +2,14 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IconButton, Menu, MenuItem, Box, Typography } from '@mui/material';
 import { IconDots } from '@tabler/icons'
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useSelector } from 'react-redux'
-import { FETCH_POSTS_QUERY, DELETE_POST, POST_UPDATED_HISTORIES } from '../../../graphql'
+import { FETCH_POSTS_QUERY, DELETE_POST } from '../../../graphql'
 import PostUpdatedHistory from './PostUpdatedHistory';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
 export default function PostMenu({ postId, userId, imagePublicId }) {
+
   const auth = useSelector(state => state?.users?.user)
   const navigate = useNavigate()
 
@@ -24,15 +25,12 @@ export default function PostMenu({ postId, userId, imagePublicId }) {
     ]
   })
 
-  const { data, loading, error } = useQuery(POST_UPDATED_HISTORIES, {
-    variables: { postId },
-  })
   const deleting = (popupState) => {
     deletePost()
     navigate('/')
     popupState.close()
   }
-  if (error) return console.log(error)
+
   return (
     <PopupState variant="popover" popupId="demo-popup-menu">
       {(popupState) => (
@@ -53,13 +51,9 @@ export default function PostMenu({ postId, userId, imagePublicId }) {
                 </Box>
               )
             }
-            {
-              !loading && data?.postupdatedhistorys.length !== 0 && (
-                <MenuItem >
-                  <PostUpdatedHistory data={data} closeMenu={popupState} />
-                </MenuItem>
-              )
-            }
+            <MenuItem >
+              <PostUpdatedHistory postId={postId} closeMenu={popupState} />
+            </MenuItem>
             <MenuItem >
               <Typography>Save Post</Typography>
             </MenuItem>
