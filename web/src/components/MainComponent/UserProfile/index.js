@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Container, Grid, Typography } from '@mui/material';
 
-import { ProfileCoverImage, ProfileImage, Followers, Following, TabComponent, MessageFollowEditBtn } from './UserProfileInterface';
+import { ProfileCoverImage, ProfileImage, Followers, Following, TabComponent, MessageFollowEditBtn, ProfileBio } from './UserProfileInterface';
 import { useStyles } from './styles';
 
 const UserProfileInterface = ({ auth, getUser, userId, isUserOnline }) => {
@@ -51,11 +51,7 @@ const UserProfileInterface = ({ auth, getUser, userId, isUserOnline }) => {
           <Grid container>
             <Grid item xs={4} />
             <Grid item xs={8} >
-              <Box sx={{ display: 'flex', justifyContent: 'start' }}>
-                <Typography variant='h5' align='center' >
-                  I'm Junior Web Developer
-                </Typography>
-              </Box>
+              <ProfileBio getUser={getUser} />
             </Grid>
           </Grid>
         </Grid>

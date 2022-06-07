@@ -2,6 +2,7 @@ import ProfileCoverImage from './ProfileCoverImage';
 import ProfileImage from './ProfileImage';
 import Following from './Following';
 import Followers from './Followers';
+import ProfileBio from './ProfileBio';
 import TabComponent from './TabComponent';
 
 import EditBtn from "./Clickable/EditBtn";
@@ -20,6 +21,7 @@ export {
   ProfileImage,
   Followers,
   Following,
+  ProfileBio,
   TabComponent,
   EditBtn,
   EditDetailsBtn,

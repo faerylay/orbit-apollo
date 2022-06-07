@@ -4,6 +4,7 @@ import { IconPencil } from '@tabler/icons';
 
 import { UserDetailsEditDialog } from '../index';
 import { useStyles } from '../../styles';
+
 const EditDetailsBtn = ({ getUser }) => {
   const classes = useStyles();
   const [isEditOpen, setIsEditOpen] = React.useState(false);
@@ -24,6 +25,7 @@ const EditDetailsBtn = ({ getUser }) => {
       </IconButton>
 
       <UserDetailsEditDialog
+        getUser={getUser}
         open={isEditOpen}
         handleClose={() => setIsEditOpen(false)}
       />

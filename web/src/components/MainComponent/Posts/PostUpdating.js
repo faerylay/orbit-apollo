@@ -8,6 +8,7 @@ import { UPDATE_POST, FETCH_POSTS_QUERY, GET_AUTH_USER, CREATE_POST_UPDATED_HIST
 import { useModify } from '../../../hooks/hooks'
 import { MAX_POST_IMAGE_SIZE } from '../../../constants'
 import { modalStyle } from './styles';
+
 export default function PostUpdating(props) {
   const navigate = useNavigate()
   const auth = useSelector(state => state?.users?.user)

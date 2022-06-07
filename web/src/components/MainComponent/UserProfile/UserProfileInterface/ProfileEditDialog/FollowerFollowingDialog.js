@@ -61,7 +61,7 @@ const FollowerFollowingDialog = ({ list, title, open, handleClose, scroll }) => 
                           variant='body2'
                           color='text.primary'
                         >
-                          Morning
+                          {p.bio ? p.bio : 'Not Bio Yet'}
                         </Typography>
                         {' — have a beautiful day guys'}
                       </React.Fragment>

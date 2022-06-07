@@ -275,6 +275,21 @@ const resolvers = {
         return updatedUser
       }
       throw new Error('Something went wrong while uploading image to Cloudinary.')
+    },
+    updateBio: async (root, { authUserId, bio }, { req }, info) => {
+      const { userId } = req.session
+      if (userId === authUserId) {
+        const updateUser = await User.findByIdAndUpdate(authUserId, {
+          bio
+        }, { new: true }).select('bio')
+        if (updateUser) {
+          return updateUser
+        } else {
+          throw new UserInputError('something wrong')
+        }
+      } else {
+        throw new UserInputError(`${authUserId}  with the given ID not found`)
+      }
     }
   },
   Subscription: {

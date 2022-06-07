@@ -14,6 +14,7 @@ const userPayload = `
   coverImage
   coverImagePublicId
   createdAt
+  bio
   isOnline
 `;
 export const UPLOAD_PHOTO = gql`
@@ -24,6 +25,14 @@ export const UPLOAD_PHOTO = gql`
   }
 `;
 
+export const UPDATE_BIO = gql`
+mutation updateBio($authUserId: ID!, $bio: String!) {
+  updateBio(authUserId: $authUserId, bio: $bio) {
+    id
+    bio
+  }
+}
+`
 export const GET_AUTH_USER = gql`
   query getAuthUser {
   getAuthUser {
@@ -109,6 +118,7 @@ query getUser($getUserId: ID!) {
       id
       follower {
         id
+        bio
         fullName
       }
     }
@@ -116,6 +126,7 @@ query getUser($getUserId: ID!) {
       id
       author {
         id
+        bio
         fullName
       }
     }

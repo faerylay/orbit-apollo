@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server-express';
+import { gql } from 'apollo-server-express'
 
 export default gql`
   union SearchResult = User | Post
@@ -12,6 +12,7 @@ export default gql`
     id: ID!
     fullName: String!
     email: String!
+    bio: String
     isOnline: Boolean
     image: File
     imagePublicId: String
@@ -33,6 +34,7 @@ export default gql`
     fullName: String
     email: String
     password: String
+    bio: String
     isOnline: Boolean
     image: String
     imagePublicId: String
@@ -91,8 +93,9 @@ export default gql`
     signOut: Boolean
     # Uploads user Profile or Cover photo
     uploadUserPhoto(input: UploadUserPhotoInput!): UserPayload @auth
+    updateBio(authUserId:ID!, bio:String!) : UserPayload @auth
   }
   extend type Subscription {
     isUserOnline(authUserId: ID!, userId: ID!): IsUserOnlinePayload
   }
-`;
+`

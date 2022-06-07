@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema({
   imagePublicId: String,
   coverImage: String,
   coverImagePublicId: String,
+  bio: String,
   isOnline: {
     type: Boolean,
     default: false

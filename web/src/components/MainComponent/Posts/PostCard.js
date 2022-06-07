@@ -69,10 +69,12 @@ const PostCard = ({ data }) => {
           </CardContent>
           <CardActions sx={{ height: 48, display: 'flex', justifyContent: 'space-between' }}>
             <Box className={classes.displayFlex} >
-              <PostLike postId={post?.id} author={post?.author} likes={post?.likes} likeCount={post?.likeCount} />
-            </Box>
-            <Box className={classes.displayFlex}>
-              <Typography variant='body1' >{post.commentCount} . Comment</Typography>
+              <Box sx={{ mr: { xs: 1, sm: 3, md: 4 } }}>
+                <PostLike postId={post?.id} author={post?.author} likes={post?.likes} likeCount={post?.likeCount} />
+              </Box>
+              <Box className={classes.displayFlex}>
+                <Typography variant='body1' >{post.commentCount} . Comment</Typography>
+              </Box>
             </Box>
             <Button size="small">
               <IconBookmark color='#999' />
