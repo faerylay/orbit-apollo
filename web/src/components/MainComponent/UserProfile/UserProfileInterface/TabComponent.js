@@ -2,15 +2,6 @@ import React from 'react'
 import { Box, Tabs, Tab, } from '@mui/material';
 import PhotosList from './PhotosList';
 import { PostsByUser } from '../../Posts';
-const TabPanel = (props) => {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`}  {...other} >
-      {value === index && (<Box> {children} </Box>)}
-    </div>
-  );
-}
 
 function a11yProps(index) {
   return {
@@ -24,6 +15,16 @@ export default function TabComponent({ getUser }) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const TabPanel = (props) => {
+    const { children, value, index, ...other } = props;
+
+    return (
+      <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`}  {...other} >
+        {value === index && (<Box> {children} </Box>)}
+      </div>
+    );
+  }
+
   return (
     <Box sx={{ width: '100%', background: '#f5f5f5' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider', background: '#fff' }}>

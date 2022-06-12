@@ -2,12 +2,14 @@ import { createStyles, makeStyles } from '@mui/styles'
 
 export const useStyles = makeStyles((theme) => createStyles({
   main__chatUsersList: {
-    height: '100%',
-    width: '100%',
     paddingInline: 10,
-    boxShadow: '3px 0 3px -4px #333, -3px 0 3px -4px #333'
+    boxShadow: '-3px 0 3px -4px #333',
+    height: 'calc(100vh - calc(100vh /1.6))',
+    minHeight: 'calc(100vh - calc(100vh /4))',
+    maxHeight: 'calc(100vh - calc(100vh /5))',
+    overflow: 'hidden',
   },
-  chatlist__heading: {
+  chatlist__header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -50,23 +52,15 @@ export const useStyles = makeStyles((theme) => createStyles({
     fontSize: 20,
   },
   chatlist__items: {
-    overflow: 'scroll',
-    maxHeight: props => props ? 'calc(100vh - calc(100vh /2))' : 'calc(100vh - calc(100vh /3))',
-    height: props => props ? 'calc(100vh - calc(100vh /2))' : 'calc(100vh - calc(100vh /3))',
+    maxHeight: 'calc(100vh - calc(100vh / 2))',
+    overflow: 'auto',
+    width: '100%',
     '&::-webkit-scrollbar': {
-      width: '0.5em',
       display: 'none'
-    },
-    "&:hover": {
-      '&::-webkit-scrollbar': {
-        display: 'block'
-      },
-    },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: 'rgba(0,0,0,.1)',
-    },
+    }
   },
   chatlist__item: {
+    width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
     background: props => props.unseen ? theme.palette.secondary.light : '#fff',
@@ -88,20 +82,22 @@ export const useStyles = makeStyles((theme) => createStyles({
     "&:first-child": {
       marginTop: 0
     },
+    "&:last-child": {
+      marginBottom: 30
+    },
     "&:hover": {
       background: theme.palette.secondary.light,
       borderRadius: 10,
     },
   },
   isOnline: {
-    position: 'absolute',
-    width: 10,
-    height: 10,
-    bottom: 0,
-    right: 0,
+    width: 11,
+    height: 11,
+    alignSelf: 'end',
+    marginLeft: -10,
+    zIndex: 99,
     background: '#ddd',
     borderRadius: '50%',
-    borderColor: '#fff'
   },
   active: {
     background: 'lightgreen',
@@ -116,17 +112,24 @@ export const useStyles = makeStyles((theme) => createStyles({
     },
   },
   avatar: {
-    borderRadius: ' 50%',
-    marginRight: 10,
-    position: 'relative',
-    width: 40,
-    height: 40,
+    display: 'flex',
+    width: '20%',
     "& img": {
       maxWidth: '100%',
       borderRadius: 20,
       objectFit: 'cover',
     }
   },
+  userMeta: {
+    width: '58%',
+    height: '100%',
+    display: 'block'
+  },
+  userDate: {
+    width: '22%',
+    display: 'flex',
+    flexDirection: 'column'
+  }
 }),
 )
 

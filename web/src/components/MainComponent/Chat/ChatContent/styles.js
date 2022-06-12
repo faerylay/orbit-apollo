@@ -5,15 +5,15 @@ const conditionCheck = props => props.users?.sender?.id !== props?.sender
 export const useStyles = makeStyles((theme) => createStyles({
   main__chatcontent: {
     flexGrow: 1,
-    paddingInline: 40,
-    paddingBottom: 10,
-    paddingTop: 20,
-    boxShadow: '3px 0 3px -4px #333'
+    padding: 0,
+    boxShadow: '3px 0 3px -4px #333, -3px 0 3px -4px #333',
   },
   content__header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    boxShadow: '0 4px 2px -2px #eee',
+    padding: 10
   },
   current_chatting_user: {
     display: 'flex',
@@ -26,14 +26,10 @@ export const useStyles = makeStyles((theme) => createStyles({
   content__body: {
     maxHeight: 'calc(100vh - calc(100vh / 2))',
     overflow: 'auto',
+    paddingInline: 10,
     '&::-webkit-scrollbar': {
-      width: '0.6em',
-      display: 'none'
-    },
-    "&:hover": {
-      '&::-webkit-scrollbar': {
-        display: 'block'
-      },
+      width: '0.4em',
+      display: 'block'
     },
     '&::-webkit-scrollbar-track': {
       backgroundColor: 'rgba(220,220,220,.1)',
@@ -68,8 +64,8 @@ export const useStyles = makeStyles((theme) => createStyles({
     }
   },
   avatar: {
-    marginRight: props => conditionCheck(props) ? 10 : 0,
-    marginLeft: props => conditionCheck(props) ? 0 : 10,
+    marginRight: props => conditionCheck(props) ? 5 : 0,
+    marginLeft: props => conditionCheck(props) ? 0 : 5,
     background: '#fff',
     padding: 1,
     width: 40,
@@ -102,13 +98,10 @@ export const useStyles = makeStyles((theme) => createStyles({
     borderBottomRightRadius: props => conditionCheck(props) ? 10 : 0
   },
   chat__item__menu: {
-    position: 'absolute',
-    top: 10,
-    color: '#aaa',
-    marginLeft: props => conditionCheck(props) ? 190 : -35,
+    marginInline: -5
   },
   isOnline: {
-    background: 'red'
+    background: 'red',
   },
   chat__meta: {
     userSelect: 'none',
@@ -123,7 +116,6 @@ export const useStyles = makeStyles((theme) => createStyles({
     fontSize: 10,
     position: 'absolute',
     bottom: -15,
-    marginLeft: props => conditionCheck(props) ? 130 : -10,
   },
   other: {
     flexDirection: props => conditionCheck(props) ? 'row-reverse' : 'row',

@@ -1,19 +1,22 @@
 import React, { useState, createRef, useEffect, useCallback } from "react";
 import { Avatar, Box, IconButton, Typography } from '@mui/material'
-import { IconDotsVertical, IconSend, IconPlus, IconSearch, IconPhone, IconVideo, IconMoodSmile, IconPaperclip } from '@tabler/icons'
+import { IconArrowNarrowLeft, IconSend, IconPlus, IconSearch, IconPhone, IconVideo, IconMoodSmile, IconPaperclip } from '@tabler/icons'
 import { useMutation } from "@apollo/client";
 
 import { useStyles } from "./styles";
 import ChatItem from "./ChatItem";
 import useWindowDimensions from "../../../../hooks/useWindowDimensions";
 import { CREATE_MESSAGE, GET_CONVERSATIONS } from '../../../../graphql'
+import ChatContentMenu from "./ChatContentMenu";
+import { useDispatch } from 'react-redux';
+import { CHAT_OPEN } from "../../../../redux";
 
 
 const ChatContent = ({ sender, receiver, messages }) => {
   const classes = useStyles()
   const { height } = useWindowDimensions()
   const messagesEndRef = createRef(null);
-
+  const dispatch = useDispatch();
   const [messageText, setMessageText] = useState('');
   const [createMessage] = useMutation(CREATE_MESSAGE);
 
@@ -66,7 +69,10 @@ const ChatContent = ({ sender, receiver, messages }) => {
       <Box className={classes.content__header}>
         <Box>
           <Box className={classes.current_chatting_user}>
-            <Box >
+            <IconButton onClick={() => dispatch(CHAT_OPEN(false))} sx={{ display: { xs: 'block', md: 'none' }, m: 0, mx: 1, p: 0 }}>
+              <IconArrowNarrowLeft />
+            </IconButton>
+            <Box>
               <Box className={classes.avatarImg}>
                 <Avatar sizes="medium" src={receiver?.image} alt="#" />
               </Box>
@@ -88,19 +94,22 @@ const ChatContent = ({ sender, receiver, messages }) => {
           <IconButton color="inherit" size="small" >
             <IconVideo />
           </IconButton>
-          <IconButton color="inherit" size="small" >
-            <IconDotsVertical />
-          </IconButton>
+          <ChatContentMenu />
         </Box>
       </Box>
-      <Box className={classes.content__body} style={{ height: height - 255, maxHeight: height - 255 }}>
+      <Box className={classes.content__body}
+        sx={{
+          height: height - 255,
+          maxHeight: height - 255,
+          minHeight: { xs: height - 140, md: height - 255 }
+        }}>
         <Box sx={{ mr: 1 }}>
           {messages.map((item, index) => {
             return (
               <ChatItem
                 key={item.id}
                 animationDelay={index + 2}
-                sender={sender.id}
+                sender={sender?.id}
                 users={item}
               />
             );

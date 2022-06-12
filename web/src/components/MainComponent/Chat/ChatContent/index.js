@@ -2,14 +2,15 @@ import React, { useCallback, useEffect } from 'react'
 import { Skeleton } from '@mui/material';
 import { useParams } from "react-router-dom";
 import { useQuery, useApolloClient } from '@apollo/client';
-
+import { useSelector } from 'react-redux'
 
 import { GET_AUTH_USER, GET_MESSAGES, GET_CONVERSATIONS, UPDATE_MESSAGE_SEEN, GET_MESSAGES_SUBSCRIPTION } from '../../../../graphql'
 import ChatContent from './ChatContent'
 
 
-const ChatConversation = ({ auth, getUser, loading }) => {
+const ChatConversation = ({ getUser, loading }) => {
   const client = useApolloClient();
+  const auth = useSelector(state => state?.users?.user)
   const { userId } = useParams();
 
 

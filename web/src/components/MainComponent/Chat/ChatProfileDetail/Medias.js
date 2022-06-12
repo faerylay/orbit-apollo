@@ -14,7 +14,7 @@ const Medias = () => {
         <Typography variant="h5" component="div">Media</Typography>
       </AccordionSummary>
       <AccordionDetails sx={{ paddingBlock: 0 }}>
-        <ImageList sx={{ width: '100%', height: 200, marginBlock: 0 }} cols={3} rowHeight={120}>
+        <ImageList sx={{ width: '100%', height: 'auto', marginBlock: 0 }} cols={3} rowHeight={120}>
           {itemData.map((item) => (
             <ImageListItem key={item.img}>
               <img

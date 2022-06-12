@@ -5,7 +5,7 @@ import { isLoggedIn } from '../auth';
 
 const AuthLogin = Loadable(lazy(() => import('../pages/Authentication/Login')));
 const Home = Loadable(lazy(() => import('../pages/Home')));
-const Chat = Loadable(lazy(() => import('../pages/ChatPage')));
+const ChatPage = Loadable(lazy(() => import('../pages/ChatPage')));
 const Profile = Loadable(lazy(() => import('../pages/ProfilePage')));
 const PostCreate = Loadable(lazy(() => import('../pages/posts/PostCreate')));
 const PostUpdate = Loadable(lazy(() => import('../pages/posts/PostUpdate')));
@@ -26,11 +26,11 @@ const MainRoutes = {
     },
     {
       path: '/chat/',
-      element: <Chat />
+      element: <ChatPage />
     },
     {
       path: '/chat/:userId',
-      element: <Chat />
+      element: <ChatPage />
     },
     {
       path: '/create-post',

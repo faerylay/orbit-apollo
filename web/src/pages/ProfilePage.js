@@ -33,18 +33,21 @@ export default function Profile() {
     );
   }
 
-  if (!loading && getUser) {
-    return (
-      <Container maxWidth={'md'} sx={{ padding: 0 }}>
-        <Paper >
-          <UserProfileInterface
-            auth={auth}
-            userId={userId}
-            isUserOnline={isUserOnline}
-            getUser={getUser}
-          />
-        </Paper>
-      </Container>
-    );
-  }
+
+  return (
+    <Container maxWidth={'lg'} sx={{ padding: 0 }}>
+      {
+        !loading && getUser && (
+          <Paper >
+            <UserProfileInterface
+              auth={auth}
+              userId={userId}
+              isUserOnline={isUserOnline}
+              getUser={getUser}
+            />
+          </Paper>
+        )
+      }
+    </Container>
+  )
 }

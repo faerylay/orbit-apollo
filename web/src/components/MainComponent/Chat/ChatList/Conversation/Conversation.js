@@ -7,8 +7,10 @@ import { ConversationItem } from "./index";
 
 import { useStyles } from "../styles";
 import { GET_CONVERSATIONS, GET_NEW_CONVERSATIONS_SUBSCRIPTION } from '../../../../../graphql'
+import useWindowDimensions from "../../../../../hooks/useWindowDimensions";
 
 const Conversation = ({ orient, auth }) => {
+  const { height } = useWindowDimensions()
   const classes = useStyles(orient)
   const { subscribeToMore, data, loading } = useQuery(GET_CONVERSATIONS, {
     variables: { authUserId: auth?.id },
@@ -46,25 +48,24 @@ const Conversation = ({ orient, auth }) => {
 
   return (
     <Box className={classes.main__chatUsersList}>
-      <Box className={classes.chatlist__heading}>
+      <Box className={classes.chatlist__header}>
         <Typography component={'span'} variant={'h3'} color="HighlightText">Chats</Typography>
         <IconButton size="small" className={classes.btnNobg}>
           <IconDots />
         </IconButton>
       </Box>
-      <Box className={classes.chatList__search}>
-        <Box className={classes.search_wrap}>
-          <input type="text" placeholder="Search Here" required />
-          <IconButton color="inherit" size="small" className={classes.searchBtn}>
-            <IconSearch />
-          </IconButton>
+      <Box className={classes.chatlist__items} style={{ height: height - 200, maxHeight: height - 200 }}>
+        <Box className={classes.chatList__search}>
+          <Box className={classes.search_wrap}>
+            <input type="text" placeholder="Search Here" required />
+            <IconButton color="inherit" size="small" className={classes.searchBtn}>
+              <IconSearch />
+            </IconButton>
+          </Box>
+          <Box sx={{ paddingBlock: 1 }}>
+            <Typography component={'span'} variant={'h4'} color="ButtonShadow">Recent</Typography>
+          </Box>
         </Box>
-      </Box>
-      <Box sx={{ paddingBlock: 1 }}>
-        <Typography component={'span'} variant={'h4'} color="ButtonShadow">Recent</Typography>
-      </Box>
-
-      <Box className={classes.chatlist__items}>
         {!loading && data?.getConversations?.map((user, index) => {
           const unseen = !user.lastMessageSender && !user.seen;
           return (
@@ -78,6 +79,7 @@ const Conversation = ({ orient, auth }) => {
             />
           );
         })}
+
       </Box>
     </Box>
   )

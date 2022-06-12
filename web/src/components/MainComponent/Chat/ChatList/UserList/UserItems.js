@@ -1,14 +1,24 @@
 import React from "react";
-import { useNavigate } from 'react-router-dom'
-import { Box, Typography, Avatar } from '@mui/material'
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { Box, Typography, Avatar, useTheme, useMediaQuery } from '@mui/material'
 import { useStyles } from "../styles";
+import { CHAT_OPEN } from "../../../../../redux";
 
 
 const UserItems = ({ userId, fullName, image, isOnline, animationDelay }) => {
   const navigate = useNavigate()
+  const theme = useTheme();
   const classes = useStyles()
+  const dispatch = useDispatch();
+  const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
+
+
   const selectChat = (e, userId) => {
     navigate(`/chat/${userId}`)
+    if (matchDownMd) {
+      dispatch(CHAT_OPEN(true))
+    }
     for (
       let index = 0;
       index < e.currentTarget.parentNode.children.length;
@@ -27,12 +37,12 @@ const UserItems = ({ userId, fullName, image, isOnline, animationDelay }) => {
       onClick={(e) => selectChat(e, userId)}
       className={`${classes.chatlist__item}  `}
     >
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', width: '100%' }}>
         <Box className={classes.avatar}>
           <Box>
             <Avatar alt="..." src={image ? image : null} />
           </Box>
-          <Typography className={`${classes['isOnline']}  ${classes[isOnline]}`}></Typography>
+          <Typography sx={{ border: 1, borderColor: '#fff' }} className={`${classes['isOnline']}  ${classes[isOnline]}`}></Typography>
         </Box>
         <Box className={classes.userMeta}>
           <Typography variant="subtitle1" component="div">{fullName}</Typography>

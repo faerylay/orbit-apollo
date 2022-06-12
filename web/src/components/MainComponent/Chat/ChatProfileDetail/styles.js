@@ -6,7 +6,13 @@ import { Switch } from '@mui/material';
 export const useStyles = makeStyles((theme) => createStyles({
   chatProfile__main: {
     paddingInline: 3,
-    maxHeight: 'calc(100vh - calc(100vh / 7))',
+  },
+  profile__header: {
+    padding: 10,
+    display: 'flex'
+  },
+  profile__body: {
+    maxHeight: 'calc(100vh - calc(100vh / 2))',
     overflow: 'auto',
     '&::-webkit-scrollbar': {
       width: '0.6em',
@@ -24,13 +30,10 @@ export const useStyles = makeStyles((theme) => createStyles({
       backgroundColor: 'rgba(0,0,0,.1)',
     },
   },
-  profile__title: {
-    padding: 10
-  },
-  profile__header: {
-    width: '100%',
+  profile__UserDetail: {
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
     background: theme.palette.grey[50],
     paddingBlock: 10,
   },
