@@ -1,6 +1,6 @@
 import React, { useState, createRef, useEffect, useCallback } from "react";
 import { Avatar, Box, IconButton, Typography } from '@mui/material'
-import { IconArrowNarrowLeft, IconSend, IconPlus, IconSearch, IconPhone, IconVideo, IconMoodSmile, IconPaperclip } from '@tabler/icons'
+import { IconArrowNarrowLeft, IconSend, IconPlus, IconMoodSmile, IconPaperclip } from '@tabler/icons'
 import { useMutation } from "@apollo/client";
 
 import { useStyles } from "./styles";
@@ -8,11 +8,13 @@ import ChatItem from "./ChatItem";
 import useWindowDimensions from "../../../../hooks/useWindowDimensions";
 import { CREATE_MESSAGE, GET_CONVERSATIONS } from '../../../../graphql'
 import ChatContentMenu from "./ChatContentMenu";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CHAT_OPEN } from "../../../../redux";
+import { UserDetailDrawer } from "../ChatDrawer";
 
 
 const ChatContent = ({ sender, receiver, messages }) => {
+  const chat = useSelector(state => state.chat)
   const classes = useStyles()
   const { height } = useWindowDimensions()
   const messagesEndRef = createRef(null);
@@ -85,15 +87,12 @@ const ChatContent = ({ sender, receiver, messages }) => {
           </Box>
         </Box>
         <Box>
-          <IconButton color="inherit" size="small" >
-            <IconSearch />
-          </IconButton>
-          <IconButton color="inherit" size="small" >
+          {/* <IconButton color="inherit" size="small" >
             <IconPhone />
           </IconButton>
           <IconButton color="inherit" size="small" >
             <IconVideo />
-          </IconButton>
+          </IconButton> */}
           <ChatContentMenu />
         </Box>
       </Box>
@@ -140,6 +139,7 @@ const ChatContent = ({ sender, receiver, messages }) => {
           </IconButton>
         </form>
       </Box>
+      <UserDetailDrawer drawerOpen={chat.profileOpened} getUser={receiver} />
     </Box>
   );
 

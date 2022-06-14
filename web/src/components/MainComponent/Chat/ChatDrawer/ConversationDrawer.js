@@ -3,7 +3,7 @@ import { Drawer } from '@mui/material';
 import ChatContent from '../ChatContent';
 
 
-const ConversationDrawer = ({ drawerOpen, getUser }) => (
+const ConversationDrawer = ({ drawerOpen }) => (
   <Drawer
     anchor="right"
     open={drawerOpen}
@@ -18,7 +18,7 @@ const ConversationDrawer = ({ drawerOpen, getUser }) => (
       },
     }}
   >
-    <ChatContent getUser={getUser} />
+    <ChatContent />
   </Drawer>
 );
 

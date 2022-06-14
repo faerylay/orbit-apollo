@@ -13,7 +13,7 @@ const UserDetailDrawer = ({ drawerOpen, getUser }) => (
       width: '100%',
       flexShrink: 0,
       '& .MuiDrawer-paper': {
-        width: '100%',
+        width: { xs: '100%', md: '40%' },
         boxSizing: 'border-box',
       },
     }}

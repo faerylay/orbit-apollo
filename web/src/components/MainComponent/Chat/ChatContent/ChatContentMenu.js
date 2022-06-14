@@ -1,9 +1,9 @@
 import React from 'react';
 import { IconButton, Menu, MenuItem, Typography } from '@mui/material';
-import { IconDotsVertical } from '@tabler/icons'
+import { IconDots } from '@tabler/icons'
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { useDispatch } from 'react-redux';
-import { PROFILE_OPEN } from '../../../../redux/chat/chatSlice';
+import { PROFILE_OPEN } from '../../../../redux/';
 
 const ChatContentMenu = () => {
   const dispatch = useDispatch()
@@ -16,7 +16,7 @@ const ChatContentMenu = () => {
       {(popupState) => (
         <>
           <IconButton {...bindTrigger(popupState)} color="inherit" size="small" >
-            <IconDotsVertical />
+            <IconDots />
           </IconButton>
           <Menu {...bindMenu(popupState)} anchorOrigin={{
             vertical: 'bottom',
@@ -29,8 +29,8 @@ const ChatContentMenu = () => {
             <MenuItem onClick={() => openProfileDetail(popupState)} sx={{ display: { md: 'block', lg: 'none' } }}>
               <Typography>View Profile</Typography>
             </MenuItem>
-            <MenuItem >
-              <Typography>Report Post</Typography>
+            <MenuItem>
+              <Typography>Delete Conversation</Typography>
             </MenuItem>
           </Menu>
         </>

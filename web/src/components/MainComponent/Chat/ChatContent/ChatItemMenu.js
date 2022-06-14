@@ -12,10 +12,11 @@ const ChatItemMenu = () => {
           <IconButton {...bindTrigger(popupState)} color="primary" size="small" disableRipple>
             <IconDotsVertical size={18} />
           </IconButton>
-          <Menu {...bindMenu(popupState)} anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
+          <Menu {...bindMenu(popupState)}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
             transformOrigin={{
               vertical: 'bottom',
               horizontal: 'center',
@@ -33,11 +34,17 @@ const ChatItemMenu = () => {
               )
             } */}
             <MenuItem>
-              <Typography>View Profile</Typography>
+              <Typography>Like</Typography>
             </MenuItem>
             <MenuItem >
-              <Typography>Report Post</Typography>
+              <Typography>Copy</Typography>
             </MenuItem>
+            {/* <MenuItem>
+              <Typography>Delete</Typography>
+            </MenuItem>
+            <MenuItem>
+              <Typography>Reply</Typography>
+            </MenuItem> */}
           </Menu>
         </>
       )}

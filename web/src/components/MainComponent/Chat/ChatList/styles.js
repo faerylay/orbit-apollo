@@ -55,6 +55,7 @@ export const useStyles = makeStyles((theme) => createStyles({
     maxHeight: 'calc(100vh - calc(100vh / 2))',
     overflow: 'auto',
     width: '100%',
+    paddingBottom: 40,
     '&::-webkit-scrollbar': {
       display: 'none'
     }

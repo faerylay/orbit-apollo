@@ -2,12 +2,12 @@ import React from 'react'
 import { Box } from '@mui/material'
 import ChatUserDetail from './ChatUserDetail'
 
-const UserProfileDetail = ({ getUser }) => {
+const ChatProfileDetail = () => {
   return (
     <Box>
-      <ChatUserDetail receiver={getUser} />
+      <ChatUserDetail />
     </Box>
   )
 }
 
-export default UserProfileDetail
+export default ChatProfileDetail

@@ -12,7 +12,6 @@ const chatSlice = createSlice({
       state.conversationOpened = action.payload
     },
     PROFILE_OPEN: (state, action) => {
-      console.log(action.payload)
       state.profileOpened = action.payload
     }
   }

@@ -1,20 +1,23 @@
 import React, { useCallback, useEffect } from 'react'
-import { Skeleton } from '@mui/material';
+import { Box, Skeleton } from '@mui/material';
 import { useParams } from "react-router-dom";
 import { useQuery, useApolloClient } from '@apollo/client';
 import { useSelector } from 'react-redux'
 
-import { GET_AUTH_USER, GET_MESSAGES, GET_CONVERSATIONS, UPDATE_MESSAGE_SEEN, GET_MESSAGES_SUBSCRIPTION } from '../../../../graphql'
+import { GET_AUTH_USER, GET_MESSAGES, GET_CONVERSATIONS, UPDATE_MESSAGE_SEEN, GET_MESSAGES_SUBSCRIPTION, FETCH_USER } from '../../../../graphql'
 import ChatContent from './ChatContent'
 
 
-const ChatConversation = ({ getUser, loading }) => {
+const ChatConversation = () => {
   const client = useApolloClient();
   const auth = useSelector(state => state?.users?.user)
   const { userId } = useParams();
 
-
-
+  const { data: { getUser } = {}, loading } = useQuery(FETCH_USER, {
+    variables: { getUserId: userId },
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "cache-first"
+  })
   const { subscribeToMore, data: messages, loading: messagesLoading } = useQuery(GET_MESSAGES, {
     variables: { authUserId: auth.id, userId },
     fetchPolicy: 'network-only',
@@ -71,7 +74,11 @@ const ChatConversation = ({ getUser, loading }) => {
 
   if (loading || messagesLoading) {
     return (
-      <Skeleton />
+      <Box sx={{ width: '100%', height: '100%' }}>
+        <Skeleton animation="pulse" variant="text" width={'100%'} height={'15%'} />
+        <Skeleton animation="pulse" variant="rectangular" width={'100%'} height={'70%'} />
+        <Skeleton animation="pulse" variant="text" width={'100%'} height={'15%'} />
+      </Box>
     );
   }
   return (

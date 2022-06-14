@@ -5,10 +5,11 @@ import { useSelector } from 'react-redux';
 import { TabPanel, a11yProps } from './Tabs';
 import { UsersList } from './UserList'
 import { Conversation } from './Conversation'
+import { ConversationDrawer } from '../ChatDrawer';
 
-const ChatUser = ({ getUser }) => {
+const ChatUser = () => {
   const auth = useSelector(state => state?.users?.user);
-
+  const chat = useSelector(state => state.chat)
   const theme = useTheme()
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -31,13 +32,14 @@ const ChatUser = ({ getUser }) => {
         </Tabs>
 
         <TabPanel value={value} index={0}>
-          <Conversation orient={orient} auth={auth} getUser={getUser} />
+          <Conversation orient={orient} auth={auth} />
         </TabPanel>
 
         <TabPanel value={value} index={1}>
           <UsersList orient={orient} auth={auth} />
         </TabPanel>
       </Box>
+      <ConversationDrawer drawerOpen={chat.conversationOpened} />
     </Box>
   )
 }
